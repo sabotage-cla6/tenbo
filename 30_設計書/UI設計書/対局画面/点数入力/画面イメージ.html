@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>tenbo - 点数入力画面イメージ</title>
+  <style>
+    :root {
+      --bg-color: #09170e;
+      --table-bg: radial-gradient(circle, #174028 0%, #0a2114 100%);
+      --card-bg: rgba(20, 48, 31, 0.9);
+      --card-border: #2c5e3d;
+      --accent-gold: #f39c12;
+      --accent-gold-light: #f1c40f;
+      --accent-red: #e74c3c;
+      --accent-blue: #3498db;
+      --accent-orange: #e67e22;
+      --text-main: #f0f4f1;
+      --text-muted: #8e9e94;
+      --dealer-color: #e67e22;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* App Header */
+    header {
+      width: 100%;
+      max-width: 420px;
+      padding: 10px 16px;
+      background: rgba(12, 28, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 13px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .header-info span {
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    /* Smartphone App Main Frame */
+    main {
+      width: 100%;
+      max-width: 420px;
+      flex: 1;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* Table Canvas */
+    .table-container {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-width: 360px;
+      background: var(--table-bg);
+      border-radius: 20px;
+      border: 6px solid #23140c;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.6);
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 8px;
+      gap: 8px;
+      position: relative;
+    }
+
+    /* Player Card Styling */
+    .player-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    }
+
+    .player-south { grid-column: 2 / 3; grid-row: 3 / 4; border-color: rgba(255, 255, 255, 0.35); }
+    .player-west { grid-column: 3 / 4; grid-row: 2 / 3; }
+    .player-north { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .player-east { grid-column: 1 / 2; grid-row: 2 / 3; border-color: var(--dealer-color); }
+
+    .player-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+
+    .wind-badge {
+      width: 18px;
+      height: 18px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 11px;
+      color: #fff;
+    }
+    .player-east .wind-badge { background: var(--dealer-color); }
+
+    .player-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .player-score {
+      font-size: 17px;
+      font-weight: 900;
+      font-family: 'Courier New', Courier, monospace;
+      color: #ffffff;
+      margin: 1px 0;
+    }
+
+    /* 点数表示の下に移動したステータス・バッジ領域 */
+    .player-bottom-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 3px;
+      min-height: 16px;
+    }
+
+    .riichi-badge {
+      display: none;
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      border: 1px solid #ff7675;
+      border-radius: 8px;
+      padding: 1px 5px;
+    }
+    .riichi-text { font-size: 8px; font-weight: 900; color: #fff; }
+    .is-riichi .riichi-badge { display: inline-flex; align-items: center; }
+
+    .yakitori-badge {
+      background: linear-gradient(135deg, #d35400, #c0392b);
+      border: 1px solid #f39c12;
+      border-radius: 8px;
+      padding: 1px 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .yakitori-icon { font-size: 9px; line-height: 1; }
+    .yakitori-text { font-size: 8px; font-weight: 900; color: #fff; }
+
+    /* Center Board */
+    .center-board {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+      background: rgba(10, 24, 16, 0.92);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+    }
+    .round-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .honba-badge { font-size: 10px; color: var(--accent-gold-light); background: rgba(243, 156, 18, 0.15); padding: 1px 6px; border-radius: 8px; }
+
+    /* Control Dock */
+    .control-dock {
+      width: 100%;
+      max-width: 360px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 12px 10px;
+      border-radius: 12px;
+      border: none;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    }
+    .btn-agari { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .btn-subtext { font-size: 9px; font-weight: 400; opacity: 0.85; }
+
+    /* Modal (点数入力画面) */
+    .modal-overlay {
+      display: flex; /* サンプル用に常時表示または切り替え */
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: #102619;
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 340px;
+      padding: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+    }
+
+    .modal-header {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: var(--accent-gold);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .modal-btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .modal-btn-primary { background: var(--accent-gold); color: #000; }
+    .modal-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-btn-disable { background: rgba(0,0,0,0); color: #fff; }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      background: #08140c;
+      color: #fff;
+      border: 1px solid var(--card-border);
+      font-size: 13px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    /* 手入力欄エリア用のスタイル */
+    .manual-input-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px dashed var(--card-border);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .manual-input-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-icon">点</div>
+      <div class="brand-name">tenbo</div>
+    </div>
+    <div class="header-info">
+      <div>東1局 0本場</div>
+    </div>
+  </header>
+
+  <!-- Smartphone Main Content -->
+  <main>
+    <div class="table-container">
+      <div class="player-card player-south">
+        <div class="player-top-row">
+          <div class="wind-badge">南</div>
+          <div class="player-name">自分</div>
+        </div>
+        <div class="player-score">23,000</div>
+        <div class="player-bottom-status">
+          <div class="yakitori-badge"><span class="yakitori-icon">🍢</span><span class="yakitori-text">焼き鳥</span></div>
+        </div>
+      </div>
+      <div class="player-card player-west">
+        <div class="player-top-row"><div class="wind-badge">西</div><div class="player-name">下家</div></div>
+        <div class="player-score">24,000</div>
+        <div class="player-bottom-status"></div>
+      </div>
+      <div class="center-board">
+        <div class="round-title">東 1 局</div>
+        <div class="honba-badge">0 本場</div>
+      </div>
+      <div class="player-card player-north">
+        <div class="player-top-row"><div class="wind-badge">北</div><div class="player-name">対面</div></div>
+        <div class="player-score">21,500</div>
+        <div class="player-bottom-status"></div>
+      </div>
+      <div class="player-card player-east">
+        <div class="player-top-row"><div class="wind-badge">東</div><div class="player-name">親</div></div>
+        <div class="player-score">31,500</div>
+        <div class="player-bottom-status"></div>
+      </div>
+    </div>
+
+    <div class="control-dock">
+      <button class="btn-action btn-agari">
+        <span>🀄 和了 (上がり)</span>
+        <span class="btn-subtext">ロン / ツモ 点数入力</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- 点数入力モーダル画面イメージ -->
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>🀄 和了（上がり）点数入力</span>
+      </div>
+      <div class="modal-body">
+        <label style="font-size:12px; color:var(--text-muted);">和了方式:</label>
+        <div class="modal-btn-row">
+          <button class="modal-btn modal-btn-primary">ロン</button>
+          <button class="modal-btn modal-btn-secondary">ツモ</button>
+        </div>
+
+        <label style="font-size:12px; color:var(--text-muted);">放銃:</label>
+        <select>
+          <option>上家</option>
+          <option>対面 (北家)</option>
+          <option>下家 (西家)</option>
+        </select>
+
+        <label style="font-size:12px; color:var(--text-muted);">点数・役の選択:</label>
+        <div class="score-grid">
+          <button class="modal-btn modal-btn-secondary">300<br />500</button>
+          <button class="modal-btn modal-btn-secondary">  500<br />1,000</button>
+          <button class="modal-btn modal-btn-secondary">1,000<br />2,000</button>
+          <button class="modal-btn modal-btn-secondary">1,000<br />3,900</button>
+          <button class="modal-btn modal-btn-secondary">400<br />700</button>
+          <button class="modal-btn modal-btn-secondary">2,600</button>
+          <button class="modal-btn modal-btn-secondary">5,200</button>
+          <button class="modal-btn modal-btn-disable"></button>
+          <button class="modal-btn modal-btn-secondary">400<br />800</button>
+          <button class="modal-btn modal-btn-secondary">3,200</button>
+          <button class="modal-btn modal-btn-secondary">6,400</button>
+          <button class="modal-btn modal-btn-disable"></button>
+          <button class="modal-btn modal-btn-primary">満貫</button>
+          <button class="modal-btn modal-btn-secondary">跳満</button>
+          <button class="modal-btn modal-btn-secondary">倍満</button>
+          <button class="modal-btn modal-btn-secondary">三倍満</button>
+          <button class="modal-btn modal-btn-secondary">役満</button>
+          <button class="modal-btn modal-btn-disable"></button>
+          <button class="modal-btn modal-btn-disable"></button>
+          <button class="modal-btn modal-btn-disable"></button>
+          <button class="modal-btn modal-btn-secondary">2,300</button>
+          <button class="modal-btn modal-btn-secondary">4,500</button>
+          <button class="modal-btn modal-btn-secondary">800<br />1,800</button>
+          <button class="modal-btn modal-btn-secondary">5,800</button>
+          <button class="modal-btn modal-btn-secondary">900<br />1,800</button>
+        </div>
+      </div>
+
+        <!-- 追加された手入力欄 -->
+        <div class="manual-input-box">
+          <label style="font-size:11px; color:var(--text-muted);">上記以外の点数:</label>
+          <div class="manual-input-row">
+            <input type="number" placeholder="点数を直入力" style="flex:1.5;" value="">
+          </div>
+        </div>
+
+      <div class="modal-btn-row">
+        <button class="modal-btn modal-btn-secondary">キャンセル</button>
+        <button class="modal-btn modal-btn-primary">点数を確定する</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
