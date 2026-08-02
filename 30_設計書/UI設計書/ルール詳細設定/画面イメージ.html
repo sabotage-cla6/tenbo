@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>tenbo - ルール編集モーダル</title>
+  <style>
+    :root {
+      --bg-color: #09170e;
+      --table-bg: radial-gradient(circle, #174028 0%, #0a2114 100%);
+      --card-bg: rgba(20, 48, 31, 0.9);
+      --card-border: #2c5e3d;
+      --accent-gold: #f39c12;
+      --accent-gold-light: #f1c40f;
+      --accent-red: #e74c3c;
+      --accent-blue: #3498db;
+      --accent-green: #2ecc71;
+      --accent-orange: #e67e22;
+      --text-main: #f0f4f1;
+      --text-muted: #8e9e94;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      max-width: 420px;
+      padding: 10px 16px;
+      background: rgba(12, 28, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .logo-icon {
+      width: 26px; height: 26px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; color: #000; font-size: 13px;
+    }
+    .brand-name {
+      font-size: 18px; font-weight: 800;
+      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* Main Area Background Simulation */
+    main {
+      width: 100%; max-width: 420px; flex: 1; padding: 12px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; position: relative;
+    }
+
+    .table-container {
+      width: 100%; aspect-ratio: 1 / 1; max-width: 360px;
+      background: var(--table-bg); border-radius: 20px; border: 6px solid #23140c;
+      display: grid; grid-template-rows: 1fr 1fr 1fr; grid-template-columns: 1fr 1fr 1fr;
+      padding: 8px; gap: 8px; opacity: 0.2; filter: blur(2px);
+    }
+
+    /* Modal Overlay & Card */
+    .modal-overlay {
+      display: flex; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+      z-index: 100; align-items: center; justify-content: center; padding: 12px;
+    }
+
+    .modal-card {
+      background: #102619; border: 1.5px solid var(--accent-gold);
+      border-radius: 16px; width: 100%; max-width: 380px; max-height: 90vh;
+      display: flex; flex-direction: column; padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      animation: modalPop 0.2s ease-out;
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      font-size: 15px; font-weight: 800; color: var(--accent-gold);
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 8px; margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
+
+    /* Category Tabs */
+    .rule-tabs {
+      display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05); scrollbar-width: none;
+    }
+    .rule-tabs::-webkit-scrollbar { display: none; }
+
+    .rule-tab-btn {
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted); padding: 5px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer;
+    }
+    .rule-tab-btn.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold-light); }
+
+    /* Modal Body Content */
+    .modal-body {
+      display: flex; flex-direction: column; gap: 12px;
+      overflow-y: auto; flex: 1; padding-right: 4px; margin-bottom: 12px;
+    }
+
+    .rule-section { display: flex; flex-direction: column; gap: 8px; }
+    .section-title {
+      font-size: 11px; font-weight: 800; color: var(--accent-gold-light);
+      display: flex; align-items: center; gap: 4px; text-transform: uppercase;
+    }
+
+    /* Editable Item Card Layout */
+    .edit-card {
+      background: rgba(8, 20, 12, 0.7);
+      border: 1px solid rgba(44, 94, 61, 0.6);
+      border-radius: 8px; padding: 8px 10px;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+
+    .edit-card.column-layout {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .edit-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .edit-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
+    .edit-sub { font-size: 10px; color: var(--text-muted); }
+
+    /* Form Controls Styling */
+    select, input[type="text"], input[type="number"] {
+      background: #06110a; color: var(--accent-gold-light);
+      border: 1px solid var(--card-border); border-radius: 6px;
+      padding: 4px 8px; font-size: 11px; font-weight: 700; text-align: right;
+      outline: none; max-width: 120px;
+    }
+    select:focus, input:focus { border-color: var(--accent-gold); }
+
+    /* Uma Input Layout */
+    .uma-inputs {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .uma-field {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .uma-field span {
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    .uma-field input {
+      width: 100%;
+      text-align: center;
+      padding: 4px 2px;
+    }
+
+    /* Toggle Switch Component */
+    .switch {
+      position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background-color: rgba(255, 255, 255, 0.15); border-radius: 22px;
+      transition: .2s; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 16px; width: 16px;
+      left: 2px; bottom: 2px; background-color: #fff; border-radius: 50%;
+      transition: .2s;
+    }
+    input:checked + .slider { background-color: var(--accent-green); }
+    input:checked + .slider:before { transform: translateX(18px); }
+
+    /* Footer Buttons */
+    .modal-btn-row { display: flex; gap: 8px; }
+    .modal-btn {
+      flex: 1; padding: 10px; border-radius: 8px; border: none;
+      font-weight: 800; font-size: 12px; cursor: pointer; text-align: center;
+    }
+    .modal-btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold), #d35400); color: #fff;
+      box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+    }
+    .modal-btn-secondary {
+      background: rgba(255, 255, 255, 0.08); color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-icon">点</div>
+      <div class="brand-name">tenbo</div>
+    </div>
+    <button class="modal-close" style="font-size:16px;">⚙️</button>
+  </header>
+
+  <!-- Smartphone Main Frame -->
+  <main>
+    <div class="table-container"></div>
+
+    <!-- Rule Edit Modal Simulation -->
+    <div class="modal-overlay">
+      <div class="modal-card">
+        
+        <!-- Header -->
+        <div class="modal-header">
+          <span>🛠️ ルール設定の編集</span>
+          <span class="modal-close" onclick="alert('変更を破棄します')">&times;</span>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="rule-tabs">
+          <button class="rule-tab-btn active">すべて</button>
+          <button class="rule-tab-btn">基本設定</button>
+          <button class="rule-tab-btn">あがり・精算</button>
+          <button class="rule-tab-btn">ドラ・赤</button>
+          <button class="rule-tab-btn">特殊ルール</button>
+        </div>
+
+        <!-- Form Body -->
+        <div class="modal-body">
+          
+          <!-- Section 1: 基本設定 -->
+          <div class="rule-section">
+            <div class="section-title">⚙️ 基本対局ルール</div>
+            
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">対局形式</span>
+                <span class="edit-sub">プレイヤー数と局数</span>
+              </div>
+              <select>
+                <option selected>4人・東南戦</option>
+                <option>4人・東風戦</option>
+                <option>3人・東南戦</option>
+                <option>3人・東風戦</option>
+              </select>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">配給原点 (持ち点)</span>
+                <span class="edit-sub">開始時の所持点数</span>
+              </div>
+              <input type="number" value="25000" step="1000">
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">返し点 (原点)</span>
+                <span class="edit-sub">オカ計算の基準点</span>
+              </div>
+              <input type="number" value="30000" step="1000">
+            </div>
+
+            <!-- 順位ウマ（数値直接入力） -->
+            <div class="edit-card column-layout">
+              <div class="edit-info">
+                <span class="edit-name">順位ウマ (pt)</span>
+                <span class="edit-sub">1位 〜 4位の配分点を指定</span>
+              </div>
+              <div class="uma-inputs">
+                <div class="uma-field">
+                  <span>1位</span>
+                  <input type="number" value="30" step="5">
+                </div>
+                <div class="uma-field">
+                  <span>2位</span>
+                  <input type="number" value="10" step="5">
+                </div>
+                <div class="uma-field">
+                  <span>3位</span>
+                  <input type="number" value="-10" step="5">
+                </div>
+                <div class="uma-field">
+                  <span>4位</span>
+                  <input type="number" value="-30" step="5">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: あがり・点数計算 -->
+          <div class="rule-section">
+            <div class="section-title">🀄 あがり・点数計算</div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">切り上げ満貫</span>
+                <span class="edit-sub">30符4翻/60符3翻を8000点化</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">トビ終了 (箱割り)</span>
+                <span class="edit-sub">持ち点0点未満で即終了</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">箱下精算</span>
+                <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">複数和了時の積棒</span>
+                <span class="edit-sub">複数人のロンあがり</span>
+              </div>
+              <select>
+                <option selected>頭ハネ (1名のみ)</option>
+                <option>全員</option>
+              </select>
+            </div>
+
+          </div>
+
+        <!-- Footer Buttons -->
+        <div class="modal-btn-row">
+          <button class="modal-btn modal-btn-secondary" onclick="alert('変更を破棄します')">キャンセル</button>
+          <button class="modal-btn modal-btn-primary" onclick="alert('ルールを保存・適用しました')">変更を保存</button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
