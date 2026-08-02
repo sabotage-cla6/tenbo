@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -263,7 +262,7 @@
 
     /* Modal (点数入力画面) */
     .modal-overlay {
-      display: flex; /* サンプル用に常時表示または切り替え */
+      display: flex; /* サンプル用に常時表示 */
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.75);
@@ -282,6 +281,8 @@
       max-width: 340px;
       padding: 18px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-header {
@@ -302,8 +303,9 @@
     }
 
     .modal-btn-row {
-      display: flex;
+      display: grid;
       gap: 8px;
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .modal-btn {
@@ -318,7 +320,69 @@
 
     .modal-btn-primary { background: var(--accent-gold); color: #000; }
     .modal-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-btn-wide { grid-column: 2 / span 2; }
     .modal-btn-disable { background: rgba(0,0,0,0); color: #fff; }
+
+    /* --- 新規追加: 設定セクション・コントロールスタイル --- */
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .setting-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .setting-label .sub-desc {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    /* 本場カウンター用スタイル */
+    .counter-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #08140c;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      padding: 2px;
+    }
+
+    .btn-counter {
+      width: 36px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-counter:active {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .counter-value {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--accent-gold-light);
+    }
+    /* ---------------------------------------------------- */
 
     select {
       width: 100%;
@@ -353,6 +417,9 @@
       gap: 6px;
       align-items: center;
     }
+
+    .edit-sub { font-size: 10px; color: var(--text-muted); }
+
   </style>
 </head>
 <body>
@@ -417,60 +484,75 @@
         <span>🀄 和了（上がり）点数入力</span>
       </div>
       <div class="modal-body">
-        <label style="font-size:12px; color:var(--text-muted);">和了方式:</label>
-        <div class="modal-btn-row">
-          <button class="modal-btn modal-btn-primary">ロン</button>
-          <button class="modal-btn modal-btn-secondary">ツモ</button>
-        </div>
 
-        <label style="font-size:12px; color:var(--text-muted);">放銃:</label>
-        <select>
-          <option>上家</option>
-          <option>対面 (北家)</option>
-          <option>下家 (西家)</option>
-        </select>
-
-        <label style="font-size:12px; color:var(--text-muted);">点数・役の選択:</label>
-        <div class="score-grid">
-          <button class="modal-btn modal-btn-secondary">300<br />500</button>
-          <button class="modal-btn modal-btn-secondary">  500<br />1,000</button>
-          <button class="modal-btn modal-btn-secondary">1,000<br />2,000</button>
-          <button class="modal-btn modal-btn-secondary">1,000<br />3,900</button>
-          <button class="modal-btn modal-btn-secondary">400<br />700</button>
-          <button class="modal-btn modal-btn-secondary">2,600</button>
-          <button class="modal-btn modal-btn-secondary">5,200</button>
-          <button class="modal-btn modal-btn-disable"></button>
-          <button class="modal-btn modal-btn-secondary">400<br />800</button>
-          <button class="modal-btn modal-btn-secondary">3,200</button>
-          <button class="modal-btn modal-btn-secondary">6,400</button>
-          <button class="modal-btn modal-btn-disable"></button>
-          <button class="modal-btn modal-btn-primary">満貫</button>
-          <button class="modal-btn modal-btn-secondary">跳満</button>
-          <button class="modal-btn modal-btn-secondary">倍満</button>
-          <button class="modal-btn modal-btn-secondary">三倍満</button>
-          <button class="modal-btn modal-btn-secondary">役満</button>
-          <button class="modal-btn modal-btn-disable"></button>
-          <button class="modal-btn modal-btn-disable"></button>
-          <button class="modal-btn modal-btn-disable"></button>
-          <button class="modal-btn modal-btn-secondary">2,300</button>
-          <button class="modal-btn modal-btn-secondary">4,500</button>
-          <button class="modal-btn modal-btn-secondary">800<br />1,800</button>
-          <button class="modal-btn modal-btn-secondary">5,800</button>
-          <button class="modal-btn modal-btn-secondary">900<br />1,800</button>
-        </div>
-      </div>
-
-        <!-- 追加された手入力欄 -->
-        <div class="manual-input-box">
-          <label style="font-size:11px; color:var(--text-muted);">上記以外の点数:</label>
-          <div class="manual-input-row">
-            <input type="number" placeholder="点数を直入力" style="flex:1.5;" value="">
+        <!-- 親・子 選択エリア -->
+        <div class="setting-group">
+          <div class="setting-label">和了者の立場:</div>
+          <div class="modal-btn-row">
+            <button class="modal-btn modal-btn-secondary">親 (東) 🀀</button>
+            <button class="modal-btn modal-btn-primary">子 🀁🀂🀃</button>
           </div>
         </div>
 
+        <!-- 和了方式 選択エリア -->
+        <div class="setting-group">
+          <div class="setting-label">和了方式:</div>
+          <div class="modal-btn-row">
+            <button class="modal-btn modal-btn-primary">ロン</button>
+            <button class="modal-btn modal-btn-secondary">ツモ</button>
+          </div>
+        </div>
+
+        <!-- 本場 変更エリア -->
+        <div class="setting-group">
+          <div class="setting-label">
+            <span>本場:</span>
+            <span class="sub-desc">+300点/本 (ツモ:各100点加算)</span>
+          </div>
+          <div class="counter-control">
+            <button class="btn-counter" type="button">－</button>
+            <span class="counter-value">0 本場</span>
+            <button class="btn-counter" type="button">＋</button>
+          </div>
+        </div>
+
+        <!-- 点数・役の選択エリア -->
+        <div style="margin-top: 4px;">
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom: 6px;">点数・役の選択:</label>
+          <div class="score-grid">
+            <button class="modal-btn modal-btn-secondary">300<br />500</button>
+            <button class="modal-btn modal-btn-secondary"> 500<br />1,000</button>
+            <button class="modal-btn modal-btn-secondary">1,000<br />2,000</button>
+            <button class="modal-btn modal-btn-secondary">2,000<br />3,900</button>
+            <button class="modal-btn modal-btn-secondary">400<br />700</button>
+            <button class="modal-btn modal-btn-secondary">2,600</button>
+            <button class="modal-btn modal-btn-secondary">5,200</button>
+            <button class="modal-btn modal-btn-disable"></button>
+            <button class="modal-btn modal-btn-secondary">400<br />800</button>
+            <button class="modal-btn modal-btn-secondary">3,200</button>
+            <button class="modal-btn modal-btn-secondary">6,400</button>
+            <button class="modal-btn modal-btn-disable"></button>
+            <button class="modal-btn modal-btn-primary">満貫</button>
+            <button class="modal-btn modal-btn-secondary">跳満</button>
+            <button class="modal-btn modal-btn-secondary">倍満</button>
+            <button class="modal-btn modal-btn-secondary">三倍満</button>
+            <button class="modal-btn modal-btn-secondary">役満</button>
+            <button class="modal-btn modal-btn-disable"></button>
+            <button class="modal-btn modal-btn-disable"></button>
+            <button class="modal-btn modal-btn-disable"></button>
+            <button class="modal-btn modal-btn-secondary">2,300</button>
+            <button class="modal-btn modal-btn-secondary">4,500</button>
+            <button class="modal-btn modal-btn-secondary">800<br />1,800</button>
+            <button class="modal-btn modal-btn-secondary">5,800</button>
+            <button class="modal-btn modal-btn-secondary">900<br />1,800</button>
+            <button class="modal-btn modal-btn-secondary modal-btn-wide">その他(支払者が設定)</button>
+          </div>
+        </div>
+      </div>
+
       <div class="modal-btn-row">
         <button class="modal-btn modal-btn-secondary">キャンセル</button>
-        <button class="modal-btn modal-btn-primary">点数を確定する</button>
+        <button class="modal-btn modal-btn-primary">点数請求</button>
       </div>
     </div>
   </div>
