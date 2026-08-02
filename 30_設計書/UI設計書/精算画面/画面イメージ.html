@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>tenbo - 精算画面イメージ</title>
+  <style>
+    :root {
+      --bg-color: #09170e;
+      --card-bg: rgba(20, 48, 31, 0.9);
+      --card-border: #2c5e3d;
+      --accent-gold: #f39c12;
+      --accent-gold-light: #f1c40f;
+      --accent-red: #e74c3c;
+      --accent-blue: #3498db;
+      --text-main: #f0f4f1;
+      --text-muted: #8e9e94;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* App Header */
+    header {
+      width: 100%;
+      max-width: 420px;
+      padding: 10px 16px;
+      background: rgba(12, 28, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 13px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-info {
+      font-size: 12px;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    /* Main Frame */
+    main {
+      width: 100%;
+      max-width: 420px;
+      flex: 1;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 順位結果リスト */
+    .ranking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ranking-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+    .ranking-card.rank-1 {
+      border-color: var(--accent-gold);
+      background: linear-gradient(135deg, rgba(243, 156, 18, 0.15), rgba(20, 48, 31, 0.9));
+    }
+
+    .rank-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rank-badge {
+      width: 26px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 13px;
+      color: #fff;
+    }
+    .rank-1 .rank-badge { background: var(--accent-gold); color: #000; }
+
+    .player-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .player-name-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .player-raw-score {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .score-result-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1px;
+    }
+
+    .final-score {
+      font-size: 15px;
+      font-weight: 900;
+      font-family: 'Courier New', Courier, monospace;
+      color: var(--accent-gold-light);
+    }
+    .final-score.minus {
+      color: #ff7675;
+    }
+
+    .pt-subtext {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* 対局サマリー情報 */
+    .summary-panel {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+
+    .summary-row span:last-child {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* フッターアクション */
+    .lobby-footer {
+      width: 100%;
+      max-width: 420px;
+      padding: 12px 16px;
+      background: rgba(12, 28, 18, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-action-primary {
+      flex: 2;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent-gold), #d35400);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+      text-align: center;
+    }
+
+    .btn-action-secondary {
+      flex: 1;
+      padding: 14px 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-action-primary:active, .btn-action-secondary:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-icon">点</div>
+      <div class="brand-name">tenbo</div>
+    </div>
+    <div class="header-info">対局終了・精算</div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- 最終順位結果 -->
+    <div>
+      <div class="section-title"><span>🏆</span> 最終成績・精算結果</div>
+      <div class="ranking-list">
+        <!-- 1位 -->
+        <div class="ranking-card rank-1">
+          <div class="rank-info">
+            <div class="rank-badge">1</div>
+            <div class="player-details">
+              <div class="player-name-text">プレイヤー1 (親)</div>
+              <div class="player-raw-score">持ち点: 41,500点</div>
+            </div>
+          </div>
+          <div class="score-result-group">
+            <div class="final-score">+51.5</div>
+            <div class="pt-subtext">ウマ +20</div>
+          </div>
+        </div>
+
+        <!-- 2位 -->
+        <div class="ranking-card">
+          <div class="rank-info">
+            <div class="rank-badge">2</div>
+            <div class="player-details">
+              <div class="player-name-text">自分</div>
+              <div class="player-raw-score">持ち点: 28,000点</div>
+            </div>
+          </div>
+          <div class="score-result-group">
+            <div class="final-score">+3.0</div>
+            <div class="pt-subtext">ウマ +10</div>
+          </div>
+        </div>
+
+        <!-- 3位 -->
+        <div class="ranking-card">
+          <div class="rank-info">
+            <div class="rank-badge">3</div>
+            <div class="player-details">
+              <div class="player-name-text">プレイヤー3</div>
+              <div class="player-raw-score">持ち点: 21,000点</div>
+            </div>
+          </div>
+          <div class="score-result-group">
+            <div class="final-score minus">-14.0</div>
+            <div class="pt-subtext">ウマ -10 / 焼き鳥 -10</div>
+          </div>
+        </div>
+
+        <!-- 4位 -->
+        <div class="ranking-card">
+          <div class="rank-info">
+            <div class="rank-badge">4</div>
+            <div class="player-details">
+              <div class="player-name-text">プレイヤー4</div>
+              <div class="player-raw-score">持ち点: 9,500点</div>
+            </div>
+          </div>
+          <div class="score-result-group">
+            <div class="final-score minus">-50.5</div>
+            <div class="pt-subtext">ウマ -20 / 飛び -10</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Footer Actions -->
+  <div class="lobby-footer">
+    <button class="btn-action-secondary" onclick="alert('戦績を保存しました')">保存する</button>
+    <button class="btn-action-primary" onclick="alert('ロビーに戻ります')">ロビーに戻る</button>
+  </div>
+
+</body>
+</html>
