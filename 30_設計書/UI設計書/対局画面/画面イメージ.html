@@ -224,60 +224,6 @@
       color: var(--text-main);
     }
 
-    /* 立直バッジ（カード左上の固定バッジ） */
-    .riichi-badge {
-      display: none;
-      position: absolute;
-      top: -6px;
-      left: -6px;
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      border: 1.5px solid #ff7675;
-      border-radius: 10px;
-      padding: 1px 6px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-      z-index: 5;
-    }
-
-    .riichi-text {
-      font-size: 8px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -0.3px;
-    }
-
-    .is-riichi .riichi-badge {
-      display: flex;
-      align-items: center;
-    }
-
-    /* 焼き鳥マーク (Yakitori Badge) */
-    .yakitori-badge {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      background: linear-gradient(135deg, #d35400, #c0392b);
-      border: 1.5px solid #f39c12;
-      border-radius: 10px;
-      padding: 1px 5px;
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-      z-index: 5;
-    }
-
-    .yakitori-icon {
-      font-size: 10px;
-      line-height: 1;
-    }
-
-    .yakitori-text {
-      font-size: 8px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-
     .player-score {
       font-size: 17px;
       font-weight: 900;
@@ -293,6 +239,62 @@
     }
     .score-diff.plus { color: #2ecc71; }
     .score-diff.minus { color: #ff7675; }
+
+    /* 点数表示の下に配置するステータスコンテナ */
+    .player-bottom-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 3px;
+      min-height: 16px;
+    }
+
+    /* 立直バッジ（点数表示の下へ移動） */
+    .riichi-badge {
+      display: none;
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      border: 1px solid #ff7675;
+      border-radius: 8px;
+      padding: 1px 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .riichi-text {
+      font-size: 8px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .is-riichi .riichi-badge {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* 焼き鳥マーク (Yakitori Badge - 点数表示の下へ移動) */
+    .yakitori-badge {
+      background: linear-gradient(135deg, #d35400, #c0392b);
+      border: 1px solid #f39c12;
+      border-radius: 8px;
+      padding: 1px 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .yakitori-icon {
+      font-size: 9px;
+      line-height: 1;
+    }
+
+    .yakitori-text {
+      font-size: 8px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
 
     /* Center Board Summary */
     .center-board {
@@ -514,32 +516,38 @@
 
       <!-- 自家：南 (下) - 焼き鳥あり -->
       <div class="player-card player-south" id="player-south">
-        <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
-        <div class="yakitori-badge" title="焼き鳥（未あがり）">
-          <span class="yakitori-icon">🍢</span>
-          <span class="yakitori-text">焼き鳥</span>
-        </div>
         <div class="player-top-row">
           <div class="wind-badge">南</div>
           <div class="player-name">自分 (自家)</div>
         </div>
         <div class="player-score" id="score-south">23,000</div>
         <div class="score-diff minus">-2,000</div>
+        <!-- 点数表示の下に移動したステータス領域 -->
+        <div class="player-bottom-status">
+          <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
+          <div class="yakitori-badge" title="焼き鳥（未あがり）">
+            <span class="yakitori-icon">🍢</span>
+            <span class="yakitori-text">焼き鳥</span>
+          </div>
+        </div>
       </div>
 
       <!-- 下家：西 (右) - 焼き鳥あり -->
       <div class="player-card player-west" id="player-west">
-        <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
-        <div class="yakitori-badge" title="焼き鳥（未あがり）">
-          <span class="yakitori-icon">🍢</span>
-          <span class="yakitori-text">焼き鳥</span>
-        </div>
         <div class="player-top-row">
           <div class="wind-badge">西</div>
           <div class="player-name">下家</div>
         </div>
         <div class="player-score" id="score-west">24,000</div>
         <div class="score-diff minus">-1,000</div>
+        <!-- 点数表示の下に移動したステータス領域 -->
+        <div class="player-bottom-status">
+          <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
+          <div class="yakitori-badge" title="焼き鳥（未あがり）">
+            <span class="yakitori-icon">🍢</span>
+            <span class="yakitori-text">焼き鳥</span>
+          </div>
+        </div>
       </div>
 
       <!-- Center Board Status -->
@@ -548,35 +556,41 @@
         <div class="honba-badge">0 本場</div>
         <div class="kyotaku-container">
           <div class="riichi-stick-icon"></div>
-          <span style="color:var(--text-muted); font-size:10px;">供託:</span>
+          <span style="color:var(--text-muted); font-size:10px;">:</span>
           <span style="color:var(--accent-gold); font-weight:700;" id="kyotaku-val">1,000</span>
         </div>
       </div>
 
       <!-- 対面：北 (上) - 焼き鳥解除済み -->
       <div class="player-card player-north" id="player-north">
-        <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
         <div class="player-top-row">
           <div class="wind-badge">北</div>
           <div class="player-name">対面</div>
         </div>
         <div class="player-score" id="score-north">21,500</div>
         <div class="score-diff minus">-3,500</div>
+        <!-- 点数表示の下に移動したステータス領域 -->
+        <div class="player-bottom-status">
+          <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
+        </div>
       </div>
 
       <!-- 上家：東・親 (左) - 立直中・焼き鳥あり -->
       <div class="player-card player-east is-dealer is-riichi" id="player-east">
-        <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
-        <div class="yakitori-badge" title="焼き鳥（未あがり）">
-          <span class="yakitori-icon">🍢</span>
-          <span class="yakitori-text">焼き鳥</span>
-        </div>
         <div class="player-top-row">
           <div class="wind-badge">東</div>
           <div class="player-name">上家 (親)</div>
         </div>
         <div class="player-score" id="score-east">31,500</div>
         <div class="score-diff plus">+6,500</div>
+        <!-- 点数表示の下に移動したステータス領域 -->
+        <div class="player-bottom-status">
+          <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
+          <div class="yakitori-badge" title="焼き鳥（未あがり）">
+            <span class="yakitori-icon">🍢</span>
+            <span class="yakitori-text">焼き鳥</span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -584,13 +598,12 @@
     <!-- Action Control Dock -->
     <div class="control-dock">
       <button class="btn-action btn-agari" onclick="openModal('agari-modal')">
-        <span>🀄 和了 (上がり)</span>
+        <span>🀄 和了</span>
         <span class="btn-subtext">ロン / ツモ 点数入力</span>
       </button>
 
       <button class="btn-action btn-riichi" onclick="toggleRiichi('south')">
-        <span>⚡ リーチ宣言</span>
-        <span class="btn-subtext">1,000点 供託へ</span>
+        <span>⚡ リーチ</span>
       </button>
 
       <button class="btn-action btn-ryukyoku" onclick="openModal('ryukyoku-modal')">
