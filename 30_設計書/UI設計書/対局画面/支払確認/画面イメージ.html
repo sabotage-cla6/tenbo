@@ -1,434 +1,231 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>tenbo - 点数入力画面イメージ</title>
-  <style>
-    :root {
-      --bg-color: #09170e;
-      --table-bg: radial-gradient(circle, #174028 0%, #0a2114 100%);
-      --card-bg: rgba(20, 48, 31, 0.9);
-      --card-border: #2c5e3d;
-      --accent-gold: #f39c12;
-      --accent-gold-light: #f1c40f;
-      --accent-red: #e74c3c;
-      --accent-blue: #3498db;
-      --accent-orange: #e67e22;
-      --text-main: #f0f4f1;
-      --text-muted: #8e9e94;
-      --dealer-color: #e67e22;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      height: 100vh;
-      height: 100dvh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-    }
-
-    /* App Header */
-    header {
-      width: 100%;
-      max-width: 420px;
-      padding: 10px 16px;
-      background: rgba(12, 28, 18, 0.98);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo-icon {
-      width: 26px;
-      height: 26px;
-      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: #000;
-      font-size: 13px;
-    }
-
-    .brand-name {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .header-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 4px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .header-info span {
-      color: var(--accent-gold);
-      font-weight: 700;
-    }
-
-    /* Smartphone App Main Frame */
-    main {
-      width: 100%;
-      max-width: 420px;
-      flex: 1;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    /* Table Canvas */
-    .table-container {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      max-width: 360px;
-      background: var(--table-bg);
-      border-radius: 20px;
-      border: 6px solid #23140c;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.6);
-      display: grid;
-      grid-template-rows: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr;
-      padding: 8px;
-      gap: 8px;
-      position: relative;
-    }
-
-    /* Player Card Styling */
-    .player-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 12px;
-      padding: 6px 4px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-    }
-
-    .player-south { grid-column: 2 / 3; grid-row: 3 / 4; border-color: rgba(255, 255, 255, 0.35); }
-    .player-west { grid-column: 3 / 4; grid-row: 2 / 3; }
-    .player-north { grid-column: 2 / 3; grid-row: 1 / 2; }
-    .player-east { grid-column: 1 / 2; grid-row: 2 / 3; border-color: var(--dealer-color); }
-
-    .player-top-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
-      margin-bottom: 2px;
-    }
-
-    .wind-badge {
-      width: 18px;
-      height: 18px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 11px;
-      color: #fff;
-    }
-    .player-east .wind-badge { background: var(--dealer-color); }
-
-    .player-name {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .player-score {
-      font-size: 17px;
-      font-weight: 900;
-      font-family: 'Courier New', Courier, monospace;
-      color: #ffffff;
-      margin: 1px 0;
-    }
-
-    /* 点数表示の下に移動したステータス・バッジ領域 */
-    .player-bottom-status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      margin-top: 3px;
-      min-height: 16px;
-    }
-
-    .riichi-badge {
-      display: none;
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      border: 1px solid #ff7675;
-      border-radius: 8px;
-      padding: 1px 5px;
-    }
-    .riichi-text { font-size: 8px; font-weight: 900; color: #fff; }
-    .is-riichi .riichi-badge { display: inline-flex; align-items: center; }
-
-    .yakitori-badge {
-      background: linear-gradient(135deg, #d35400, #c0392b);
-      border: 1px solid #f39c12;
-      border-radius: 8px;
-      padding: 1px 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-    }
-    .yakitori-icon { font-size: 9px; line-height: 1; }
-    .yakitori-text { font-size: 8px; font-weight: 900; color: #fff; }
-
-    /* Center Board */
-    .center-board {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-      background: rgba(10, 24, 16, 0.92);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 6px;
-    }
-    .round-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 2px; }
-    .honba-badge { font-size: 10px; color: var(--accent-gold-light); background: rgba(243, 156, 18, 0.15); padding: 1px 6px; border-radius: 8px; }
-
-    /* Control Dock */
-    .control-dock {
-      width: 100%;
-      max-width: 360px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .btn-action {
-      padding: 12px 10px;
-      border-radius: 12px;
-      border: none;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      color: #fff;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-    }
-    .btn-agari { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-    .btn-subtext { font-size: 9px; font-weight: 400; opacity: 0.85; }
-
-    /* Modal (点数入力画面) */
-    .modal-overlay {
-      display: flex; /* サンプル用に常時表示または切り替え */
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .modal-card {
-      background: #102619;
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 340px;
-      padding: 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-    }
-
-    .modal-header {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      color: var(--accent-gold);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-body {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .modal-btn-row {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .modal-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      font-weight: bold;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .modal-btn-primary { background: var(--accent-gold); color: #000; }
-    .modal-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
-    .modal-btn-wide { grid-column: 2 / span 2; }
-    .modal-btn-disable { background: rgba(0,0,0,0); color: #fff; }
-
-    select {
-      width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      background: #08140c;
-      color: #fff;
-      border: 1px solid var(--card-border);
-      font-size: 13px;
-    }
-
-    .score-grid {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap: 6px;
-    }
-
-    /* 手入力欄エリア用のスタイル */
-    .manual-input-box {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px dashed var(--card-border);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-
-    .manual-input-row {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tenbo - 支払確認画面 (個別に点数入力)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #0f172a;
+        }
+        .mahjong-table {
+            background-color: #065f46;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        }
+        /* クロム、サファリ、エッジの数値入力の矢印を非表示 */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        /* Firefoxの数値入力矢印非表示 */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen p-4 text-white">
 
-  <!-- App Header -->
-  <header>
-    <div class="brand">
-      <div class="logo-icon">点</div>
-      <div class="brand-name">tenbo</div>
-    </div>
-    <div class="header-info">
-      <div>東1局 0本場</div>
-    </div>
-  </header>
-
-  <!-- Smartphone Main Content -->
-  <main>
-    <div class="table-container">
-      <div class="player-card player-south">
-        <div class="player-top-row">
-          <div class="wind-badge">南</div>
-          <div class="player-name">自分</div>
+    <div class="w-full max-w-md bg-slate-900 rounded-2xl p-4 shadow-2xl border border-slate-800 flex flex-col gap-4">
+        
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center px-2 pt-1">
+            <div>
+                <h1 class="text-lg font-bold text-slate-200">支払確認</h1>
+                <p class="text-[10px] text-slate-400">移動する点数を直接またはプリセットで入力</p>
+            </div>
+            <span class="text-xs bg-slate-800 text-amber-400 px-2.5 py-1 rounded-full border border-slate-700">東2局 0本場</span>
         </div>
-        <div class="player-score">23,000</div>
-        <div class="player-bottom-status">
-          <div class="yakitori-badge"><span class="yakitori-icon">🍢</span><span class="yakitori-text">焼き鳥</span></div>
+
+        <!-- 対局画面風 4方向レイアウト -->
+        <div class="mahjong-table relative rounded-xl p-3 grid grid-cols-3 grid-rows-3 gap-2 items-center justify-items-center h-[380px] border-4 border-amber-950">
+            
+            <!-- 対面 (上) -->
+            <div id="card-top" class="col-start-2 row-start-1 w-full bg-slate-800/95 border-2 border-red-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
+                <div class="flex items-center justify-between w-full text-[10px]">
+                    <span id="role-top" class="text-red-400 font-semibold px-1 rounded bg-red-950/80">支払相手</span>
+                    <span class="text-slate-400">西家</span>
+                </div>
+                <div class="font-bold text-xs truncate max-w-[90px]">対面 (Aさん)</div>
+                <div class="text-[11px] font-mono text-slate-300">25,000点</div>
+                
+                <!-- 点数入力欄 -->
+                <div class="w-full mt-1">
+                    <div class="text-[9px] text-slate-400 text-left mb-0.5">支払額 (点)</div>
+                    <div class="relative flex items-center">
+                        <input type="number" id="input-top" value="1000" step="100" min="0" oninput="calculateTotal()" 
+                            class="w-full bg-slate-950 border border-slate-700 focus:border-amber-400 focus:outline-none rounded px-1.5 py-0.5 text-right font-mono font-bold text-amber-300 text-xs">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 上手 (左) -->
+            <div id="card-left" class="col-start-1 row-start-2 w-full bg-slate-800/95 border-2 border-slate-700/50 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
+                <div class="flex items-center justify-between w-full text-[10px]">
+                    <span id="role-left" class="text-slate-400">対象外</span>
+                    <span class="text-slate-400">北家</span>
+                </div>
+                <div class="font-bold text-xs truncate max-w-[90px]">上手 (Bさん)</div>
+                <div class="text-[11px] font-mono text-slate-300">25,000点</div>
+                
+                <!-- 点数入力欄 -->
+                <div class="w-full mt-1">
+                    <div class="text-[9px] text-slate-400 text-left mb-0.5">支払額 (点)</div>
+                    <div class="relative flex items-center">
+                        <input type="number" id="input-left" value="0" step="100" min="0" disabled oninput="calculateTotal()" 
+                            class="w-full bg-slate-950 border border-slate-800 disabled:opacity-40 focus:border-amber-400 focus:outline-none rounded px-1.5 py-0.5 text-right font-mono font-bold text-amber-300 text-xs">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中央：対局卓中央のステータス ＆ 点数プリセット -->
+            <div class="col-start-2 row-start-2 w-full h-full bg-slate-950/90 border border-slate-700/80 rounded-lg p-2 flex flex-col justify-between items-center text-center shadow-inner">
+                <div class="text-[10px] font-bold text-amber-400">クイック設定</div>
+                
+                <!-- プリセットボタン -->
+                <div class="grid grid-cols-2 gap-1 w-full text-[10px]">
+                    <button onclick="applyPreset(1000)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">1,000</button>
+                    <button onclick="applyPreset(2000)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">2,000</button>
+                    <button onclick="applyPreset(3900)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">3,900</button>
+                    <button onclick="applyPreset(7700)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">7,700</button>
+                </div>
+
+                <!-- 合計移動点数 -->
+                <div class="w-full bg-slate-900/90 rounded py-0.5 border border-slate-800">
+                    <span class="text-[9px] text-slate-400 block">合計受取額</span>
+                    <span id="total-display" class="text-sm font-bold text-yellow-400 font-mono">1,000 点</span>
+                </div>
+            </div>
+
+            <!-- 下手 (右) -->
+            <div id="card-right" class="col-start-3 row-start-2 w-full bg-slate-800/95 border-2 border-slate-700/50 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
+                <div class="flex items-center justify-between w-full text-[10px]">
+                    <span id="role-right" class="text-slate-400">対象外</span>
+                    <span class="text-slate-400">南家</span>
+                </div>
+                <div class="font-bold text-xs truncate max-w-[90px]">下手 (Cさん)</div>
+                <div class="text-[11px] font-mono text-slate-300">25,000点</div>
+                
+                <!-- 点数入力欄 -->
+                <div class="w-full mt-1">
+                    <div class="text-[9px] text-slate-400 text-left mb-0.5">支払額 (点)</div>
+                    <div class="relative flex items-center">
+                        <input type="number" id="input-right" value="0" step="100" min="0" disabled oninput="calculateTotal()" 
+                            class="w-full bg-slate-950 border border-slate-800 disabled:opacity-40 focus:border-amber-400 focus:outline-none rounded px-1.5 py-0.5 text-right font-mono font-bold text-amber-300 text-xs">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自分 (下) -->
+            <div class="col-start-2 row-start-3 w-full bg-indigo-950/95 border-2 border-indigo-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
+                <div class="flex items-center justify-between w-full text-[10px]">
+                    <span class="text-indigo-300 font-semibold px-1 rounded bg-indigo-900/60">和了者</span>
+                    <span class="text-indigo-300">東家</span>
+                </div>
+                <div class="font-bold text-xs truncate max-w-[90px]">自分 (You)</div>
+                <div class="text-[11px] font-mono text-amber-300">25,000点</div>
+                
+                <div class="w-full mt-1 bg-indigo-900/40 rounded py-0.5 border border-indigo-800/50">
+                    <span class="text-[9px] text-indigo-300">受取合計: </span>
+                    <span id="self-receive-display" class="text-xs font-bold font-mono text-yellow-300">+1,000</span>
+                </div>
+            </div>
+
         </div>
-      </div>
-      <div class="player-card player-west">
-        <div class="player-top-row"><div class="wind-badge">西</div><div class="player-name">下家</div></div>
-        <div class="player-score">24,000</div>
-        <div class="player-bottom-status"></div>
-      </div>
-      <div class="center-board">
-        <div class="round-title">東 1 局</div>
-        <div class="honba-badge">0 本場</div>
-      </div>
-      <div class="player-card player-north">
-        <div class="player-top-row"><div class="wind-badge">北</div><div class="player-name">対面</div></div>
-        <div class="player-score">21,500</div>
-        <div class="player-bottom-status"></div>
-      </div>
-      <div class="player-card player-east">
-        <div class="player-top-row"><div class="wind-badge">東</div><div class="player-name">親</div></div>
-        <div class="player-score">31,500</div>
-        <div class="player-bottom-status"></div>
-      </div>
+
+        <!-- 確定ボタン -->
+        <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm rounded-xl shadow-lg transition active:scale-[0.98]">
+            支払いを確定する
+        </button>
+
     </div>
 
-    <div class="control-dock">
-      <button class="btn-action btn-agari">
-        <span>🀄 和了 (上がり)</span>
-        <span class="btn-subtext">ロン / ツモ 点数入力</span>
-      </button>
-    </div>
-  </main>
+    <script>
+        let currentWinType = 'ron';
+        let targetPlayer = 'top'; // ロン時の選択プレイヤー
 
-  <!-- 点数入力モーダル画面イメージ -->
-  <div class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <span>🀄 支払確認</span>
-      </div>
-      <div class="modal-body">
-        <label style="font-size:12px; color:var(--text-muted);">支払:</label>
-        <input type="number" value="16000" step="100" disabled />
-      </div>
+        function calculateTotal() {
+            const topVal = parseInt(document.getElementById('input-top').value) || 0;
+            const leftVal = parseInt(document.getElementById('input-left').value) || 0;
+            const rightVal = parseInt(document.getElementById('input-right').value) || 0;
 
-      <div class="modal-btn-row">
-        <button class="modal-btn modal-btn-secondary">スキップ</button>
-        <button class="modal-btn modal-btn-primary">支払</button>
-      </div>
-    </div>
-  </div>
+            const total = topVal + leftVal + rightVal;
+            document.getElementById('total-display').innerText = total.toLocaleString() + ' 点';
+            document.getElementById('self-receive-display').innerText = '+' + total.toLocaleString();
+        }
 
+        function setWinType(type) {
+            currentWinType = type;
+            const ronBtn = document.getElementById('btn-ron');
+            const tsumoBtn = document.getElementById('btn-tsumo');
+
+            const inputs = {
+                top: document.getElementById('input-top'),
+                left: document.getElementById('input-left'),
+                right: document.getElementById('input-right')
+            };
+
+            const cards = {
+                top: document.getElementById('card-top'),
+                left: document.getElementById('card-left'),
+                right: document.getElementById('card-right')
+            };
+
+            const roles = {
+                top: document.getElementById('role-top'),
+                left: document.getElementById('role-left'),
+                right: document.getElementById('role-right')
+            };
+
+            if (type === 'ron') {
+                ronBtn.className = 'py-2 rounded-lg font-bold text-xs bg-red-600 text-white shadow transition';
+                tsumoBtn.className = 'py-2 rounded-lg font-bold text-xs bg-slate-800 text-slate-400 hover:text-white transition';
+
+                // ロンモード：対面（top）のみ有効化
+                ['top', 'left', 'right'].forEach(p => {
+                    if (p === targetPlayer) {
+                        inputs[p].disabled = false;
+                        inputs[p].value = 1000;
+                        cards[p].className = 'col-start-' + (p==='top'?2:p==='left'?1:3) + ' row-start-' + (p==='top'?1:2) + ' w-full bg-slate-800/95 border-2 border-red-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full';
+                        roles[p].className = 'text-red-400 font-semibold px-1 rounded bg-red-950/80';
+                        roles[p].innerText = '支払相手';
+                    } else {
+                        inputs[p].disabled = true;
+                        inputs[p].value = 0;
+                        cards[p].className = 'col-start-' + (p==='top'?2:p==='left'?1:3) + ' row-start-' + (p==='top'?1:2) + ' w-full bg-slate-800/95 border-2 border-slate-700/50 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full';
+                        roles[p].className = 'text-slate-400';
+                        roles[p].innerText = '対象外';
+                    }
+                });
+            } else {
+                tsumoBtn.className = 'py-2 rounded-lg font-bold text-xs bg-blue-600 text-white shadow transition';
+                ronBtn.className = 'py-2 rounded-lg font-bold text-xs bg-slate-800 text-slate-400 hover:text-white transition';
+
+                // ツモモード：全員有効化
+                ['top', 'left', 'right'].forEach(p => {
+                    inputs[p].disabled = false;
+                    inputs[p].value = 1000;
+                    cards[p].className = 'col-start-' + (p==='top'?2:p==='left'?1:3) + ' row-start-' + (p==='top'?1:2) + ' w-full bg-slate-800/95 border-2 border-blue-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full';
+                    roles[p].className = 'text-blue-300 font-semibold px-1 rounded bg-blue-950/80';
+                    roles[p].innerText = '支払者';
+                });
+            }
+            calculateTotal();
+        }
+
+        function applyPreset(amount) {
+            if (currentWinType === 'ron') {
+                document.getElementById('input-' + targetPlayer).value = amount;
+            } else {
+                // ツモ時は各自均等などにセット（子の負担額想定）
+                document.getElementById('input-top').value = amount;
+                document.getElementById('input-left').value = amount;
+                document.getElementById('input-right').value = amount;
+            }
+            calculateTotal();
+        }
+    </script>
 </body>
 </html>
