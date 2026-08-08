@@ -14,6 +14,7 @@
       --accent-gold-light: #f1c40f;
       --accent-red: #e74c3c;
       --accent-blue: #3498db;
+      --accent-green: #2ecc71;
       --accent-orange: #e67e22;
       --text-main: #f0f4f1;
       --text-muted: #8e9e94;
@@ -107,6 +108,94 @@
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+
+    /* 統合カード：卓設定・対局ルール */
+    .integrated-table-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+    .table-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-name-input {
+      background: #08140c;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--accent-gold-light);
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .table-name-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    .rule-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      width: 100%;
+    }
+
+    .rule-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 4px;
+      transition: background 0.2s;
+    }
+
+    .rule-summary-row:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .rule-info-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rule-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .rule-sub-text {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-edit-rule {
+      background: rgba(243, 156, 18, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-light);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
     }
 
     /* 参加プレイヤー設定カード群 */
@@ -250,6 +339,166 @@
     .btn-start:active, .btn-exit:active {
       transform: scale(0.98);
     }
+
+    /* --- モーダル（ルール編集画面）用スタイル --- */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+      z-index: 100; align-items: center; justify-content: center; padding: 12px;
+    }
+
+    .modal-card {
+      background: #102619; border: 1.5px solid var(--accent-gold);
+      border-radius: 16px; width: 100%; max-width: 380px; max-height: 85vh;
+      display: flex; flex-direction: column; padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      animation: modalPop 0.2s ease-out;
+      overflow: hidden;
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      font-size: 15px; font-weight: 800; color: var(--accent-gold);
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 8px; margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .modal-close { cursor: pointer; font-size: 20px; color: var(--text-muted); background: none; border: none; }
+
+    .rule-tabs {
+      display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05); scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    .rule-tabs::-webkit-scrollbar { display: none; }
+
+    .rule-tab-btn {
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted); padding: 5px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer;
+    }
+    .rule-tab-btn.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold-light); }
+
+    .modal-body {
+      display: flex; flex-direction: column; gap: 10px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+      padding-right: 4px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .rule-section {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    
+    .section-title-summary {
+      font-size: 11px; font-weight: 800; color: var(--accent-gold-light);
+      display: flex; align-items: center; justify-content: space-between; gap: 4px;
+      text-transform: uppercase;
+      padding: 10px;
+      cursor: pointer;
+      list-style: none;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .section-title-summary::-webkit-details-marker { display: none; }
+
+    .section-title-summary::after {
+      content: '▶';
+      font-size: 9px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    .rule-section[open] .section-title-summary::after {
+      transform: rotate(90deg);
+    }
+
+    .section-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .edit-card {
+      background: rgba(8, 20, 12, 0.7);
+      border: 1px solid rgba(44, 94, 61, 0.6);
+      border-radius: 8px; padding: 8px 10px;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+
+    .edit-card.column-layout {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .edit-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .edit-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
+    .edit-sub { font-size: 10px; color: var(--text-muted); }
+
+    select, input[type="text"].modal-input, input[type="number"] {
+      background: #06110a; color: var(--accent-gold-light);
+      border: 1px solid var(--card-border); border-radius: 6px;
+      padding: 4px 8px; font-size: 11px; font-weight: 700; text-align: right;
+      outline: none; max-width: 120px;
+    }
+    select:focus, input:focus { border-color: var(--accent-gold); }
+
+    .uma-inputs {
+      display: flex; gap: 4px; width: 100%; justify-content: space-between;
+    }
+
+    .uma-field {
+      display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1;
+    }
+
+    .uma-field span { font-size: 9px; color: var(--text-muted); }
+    .uma-field input { width: 100%; text-align: center; padding: 4px 2px; }
+
+    .switch {
+      position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background-color: rgba(255, 255, 255, 0.15); border-radius: 22px;
+      transition: .2s; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 16px; width: 16px;
+      left: 2px; bottom: 2px; background-color: #fff; border-radius: 50%;
+      transition: .2s;
+    }
+    input:checked + .slider { background-color: var(--accent-green); }
+    input:checked + .slider:before { transform: translateX(18px); }
+
+    .modal-btn-row { display: flex; gap: 8px; flex-shrink: 0; }
+    .modal-btn {
+      flex: 1; padding: 10px; border-radius: 8px; border: none;
+      font-weight: 800; font-size: 12px; cursor: pointer; text-align: center;
+    }
+    .modal-btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold), #d35400); color: #fff;
+      box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+    }
+    .modal-btn-secondary {
+      background: rgba(255, 255, 255, 0.08); color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
   </style>
 </head>
 <body>
@@ -265,6 +514,35 @@
 
   <!-- Main Content -->
   <main>
+    <!-- 統合：卓情報・対局ルール -->
+    <div>
+      <div class="section-title"><span>🀄</span> 卓情報・対局ルール</div>
+      <div class="integrated-table-card">
+        
+        <!-- 1. 卓の名前 -->
+        <div class="table-name-row">
+          <input type="text" class="table-name-input" value="金曜定期セット卓 (東南戦)">
+          <button class="btn-icon-small" title="名前変更">✏️</button>
+        </div>
+
+        <div class="rule-divider"></div>
+
+        <!-- 2. 対局ルール表示 ＆ 詳細モーダルへの遷移 -->
+        <div class="rule-summary-row" onclick="openRuleModal()">
+          <div class="rule-info-text">
+            <div class="rule-title-row">
+              <span>4人・半荘 (25,000点持ち / 30,000点返し)</span>
+            </div>
+            <div class="rule-sub-text">ウマ: 10-30 / 切り上げ満貫あり / 箱トビ終了あり</div>
+          </div>
+          <div class="btn-edit-rule">
+            <span>詳細・変更</span> ⚙️
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- 参加プレイヤー設定 -->
     <div>
       <div class="section-title"><span>👥</span> 参加プレイヤー・座席設定</div>
@@ -326,11 +604,223 @@
     </div>
   </main>
 
-  <!-- Footer Action (対局を開始するボタンの右に退出ボタンを配置) -->
+  <!-- Footer Action -->
   <div class="lobby-footer">
     <button class="btn-start" onclick="alert('対局画面へ遷移します')">対局を開始する</button>
     <button class="btn-exit" onclick="alert('ロビーから退出します')"><span>🚪</span> 退出</button>
   </div>
 
+  <!-- 詳細ルール編集モーダル -->
+  <div class="modal-overlay" id="ruleModal">
+    <div class="modal-card">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <span>🛠️ ルール設定の編集</span>
+        <button class="modal-close" onclick="closeRuleModal()">&times;</button>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="rule-tabs">
+        <button class="rule-tab-btn active">すべて</button>
+        <button class="rule-tab-btn">基本設定</button>
+        <button class="rule-tab-btn">あがり・精算</button>
+        <button class="rule-tab-btn">ドラ・赤</button>
+        <button class="rule-tab-btn">特殊ルール</button>
+      </div>
+
+      <!-- Form Body (スクロール領域) -->
+      <div class="modal-body">
+        
+        <!-- Section 1: 基本設定 -->
+        <details class="rule-section" open>
+          <summary class="section-title-summary">⚙️ 基本対局ルール</summary>
+          
+          <div class="section-content">
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">対局形式</span>
+                <span class="edit-sub">プレイヤー数と局数</span>
+              </div>
+              <select>
+                <option selected>4人・東南戦</option>
+                <option>4人・東風戦</option>
+                <option>3人・東南戦</option>
+                <option>3人・東風戦</option>
+              </select>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">配給原点 (持ち点)</span>
+                <span class="edit-sub">開始時の所持点数</span>
+              </div>
+              <input type="number" value="25000" step="1000">
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">返し点 (原点)</span>
+                <span class="edit-sub">オカ計算の基準点</span>
+              </div>
+              <input type="number" value="30000" step="1000">
+            </div>
+
+            <div class="edit-card column-layout">
+              <div class="edit-info">
+                <span class="edit-name">順位ウマ (pt)</span>
+                <span class="edit-sub">1位 〜 4位の配分点を指定</span>
+              </div>
+              <div class="uma-inputs">
+                <div class="uma-field">
+                  <span>1位</span>
+                  <input type="number" value="30" step="5">
+                </div>
+                <div class="uma-field">
+                  <span>2位</span>
+                  <input type="number" value="10" step="5">
+                </div>
+                <div class="uma-field">
+                  <span>3位</span>
+                  <input type="number" value="-10" step="5">
+                </div>
+                <div class="uma-field">
+                  <span>4位</span>
+                  <input type="number" value="-30" step="5">
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Section 2: あがり・点数計算 -->
+        <details class="rule-section">
+          <summary class="section-title-summary">🀄 あがり・点数計算</summary>
+
+          <div class="section-content">
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">切り上げ満貫</span>
+                <span class="edit-sub">30符4翻/60符3翻を8000点化</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">複数和了時の積棒</span>
+                <span class="edit-sub">複数人のロンあがり</span>
+              </div>
+              <select>
+                <option selected>頭ハネ (1名のみ)</option>
+                <option>全員</option>
+              </select>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">トビ終了 (箱割り)</span>
+                <span class="edit-sub">持ち点0点未満で即終了</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </details>
+
+        <!-- Section 3: 精算 -->
+        <details class="rule-section">
+          <summary class="section-title-summary">⚙️ 精算</summary>
+          
+          <div class="section-content">
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">100点棒</span>
+                <span class="edit-sub">100点棒の丸め方法を指定</span>
+              </div>
+              <select>
+                <option selected>五捨六入</option>
+                <option>丸めなし（小数点利用）</option>
+                <option>四捨五入</option>
+                <option>切り捨て</option>
+                <option>切り上げ</option>
+              </select>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">箱下精算</span>
+                <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </details>
+
+        <!-- Section 4: 途中終了 -->
+        <details class="rule-section">
+          <summary class="section-title-summary">⚙️ 途中終了</summary>
+          
+          <div class="section-content">
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">100点棒</span>
+                <span class="edit-sub">100点棒の丸め方法を指定</span>
+              </div>
+              <select>
+                <option selected>五捨六入</option>
+                <option>丸めなし（小数点利用）</option>
+                <option>四捨五入</option>
+                <option>切り捨て</option>
+                <option>切り上げ</option>
+              </select>
+            </div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">箱下精算</span>
+                <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </details>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-btn-row">
+        <button class="modal-btn modal-btn-secondary" onclick="closeRuleModal()">キャンセル</button>
+        <button class="modal-btn modal-btn-primary" onclick="saveRuleModal()">変更を保存</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function openRuleModal() {
+      document.getElementById('ruleModal').style.display = 'flex';
+    }
+
+    function closeRuleModal() {
+      document.getElementById('ruleModal').style.display = 'none';
+    }
+
+    function saveRuleModal() {
+      alert('ルール設定を保存しました');
+      closeRuleModal();
+    }
+  </script>
 </body>
 </html>
