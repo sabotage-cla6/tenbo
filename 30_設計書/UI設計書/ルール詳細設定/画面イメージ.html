@@ -89,12 +89,14 @@
       z-index: 100; align-items: center; justify-content: center; padding: 12px;
     }
 
+    /* モーダルカードの縦幅溢れを抑え、可変にする設定 */
     .modal-card {
       background: #102619; border: 1.5px solid var(--accent-gold);
-      border-radius: 16px; width: 100%; max-width: 380px; max-height: 90vh;
+      border-radius: 16px; width: 100%; max-width: 380px; max-height: 85vh;
       display: flex; flex-direction: column; padding: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.8);
       animation: modalPop 0.2s ease-out;
+      overflow: hidden; /* 子要素のスクロールを正しく機能させる */
     }
 
     @keyframes modalPop {
@@ -107,14 +109,16 @@
       display: flex; justify-content: space-between; align-items: center;
       padding-bottom: 8px; margin-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0; /* ヘッダーの潰れ防止 */
     }
 
-    .modal-close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
+    .modal-close { cursor: pointer; font-size: 20px; color: var(--text-muted); background: none; border: none; }
 
     /* Category Tabs */
     .rule-tabs {
       display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05); scrollbar-width: none;
+      flex-shrink: 0; /* タブの潰れ防止 */
     }
     .rule-tabs::-webkit-scrollbar { display: none; }
 
@@ -125,16 +129,55 @@
     }
     .rule-tab-btn.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold-light); }
 
-    /* Modal Body Content */
+    /* Modal Body Content (スクロール領域の設定強化) */
     .modal-body {
-      display: flex; flex-direction: column; gap: 12px;
-      overflow-y: auto; flex: 1; padding-right: 4px; margin-bottom: 12px;
+      display: flex; flex-direction: column; gap: 10px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0; /* Flexボックス内のスクロールを正常化する必須プロパティ */
+      padding-right: 4px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch; /* スマホでのスムーズスクロール */
     }
 
-    .rule-section { display: flex; flex-direction: column; gap: 8px; }
+    /* 折りたたみ (details/summary) スタイル設定 */
+    .rule-section {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0; /* 折たたみ時に縮まないように固定 */
+    }
+    
     .section-title {
       font-size: 11px; font-weight: 800; color: var(--accent-gold-light);
-      display: flex; align-items: center; gap: 4px; text-transform: uppercase;
+      display: flex; align-items: center; justify-content: space-between; gap: 4px;
+      text-transform: uppercase;
+      padding: 10px;
+      cursor: pointer;
+      list-style: none;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .section-title::-webkit-details-marker {
+      display: none;
+    }
+
+    .section-title::after {
+      content: '▶';
+      font-size: 9px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    .rule-section[open] .section-title::after {
+      transform: rotate(90deg);
+    }
+
+    .section-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px;
     }
 
     /* Editable Item Card Layout */
@@ -210,7 +253,10 @@
     input:checked + .slider:before { transform: translateX(18px); }
 
     /* Footer Buttons */
-    .modal-btn-row { display: flex; gap: 8px; }
+    .modal-btn-row {
+      display: flex; gap: 8px;
+      flex-shrink: 0; /* ボタンエリアの潰れ防止 */
+    }
     .modal-btn {
       flex: 1; padding: 10px; border-radius: 8px; border: none;
       font-weight: 800; font-size: 12px; cursor: pointer; text-align: center;
@@ -263,129 +309,128 @@
         <div class="modal-body">
           
           <!-- Section 1: 基本設定 -->
-          <div class="rule-section">
-            <div class="section-title">⚙️ 基本対局ルール</div>
+          <details class="rule-section" open>
+            <summary class="section-title">⚙️ 基本対局ルール</summary>
             
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">対局形式</span>
-                <span class="edit-sub">プレイヤー数と局数</span>
-              </div>
-              <select>
-                <option selected>4人・東南戦</option>
-                <option>4人・東風戦</option>
-                <option>3人・東南戦</option>
-                <option>3人・東風戦</option>
-              </select>
-            </div>
-
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">配給原点 (持ち点)</span>
-                <span class="edit-sub">開始時の所持点数</span>
-              </div>
-              <input type="number" value="25000" step="1000">
-            </div>
-
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">返し点 (原点)</span>
-                <span class="edit-sub">オカ計算の基準点</span>
-              </div>
-              <input type="number" value="30000" step="1000">
-            </div>
-
-            <!-- 順位ウマ（数値直接入力） -->
-            <div class="edit-card column-layout">
-              <div class="edit-info">
-                <span class="edit-name">順位ウマ (pt)</span>
-                <span class="edit-sub">1位 〜 4位の配分点を指定</span>
-              </div>
-              <div class="uma-inputs">
-                <div class="uma-field">
-                  <span>1位</span>
-                  <input type="number" value="30" step="5">
+            <div class="section-content">
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">対局形式</span>
+                  <span class="edit-sub">プレイヤー数と局数</span>
                 </div>
-                <div class="uma-field">
-                  <span>2位</span>
-                  <input type="number" value="10" step="5">
+                <select>
+                  <option selected>4人・東南戦</option>
+                  <option>4人・東風戦</option>
+                  <option>3人・東南戦</option>
+                  <option>3人・東風戦</option>
+                </select>
+              </div>
+
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">配給原点 (持ち点)</span>
+                  <span class="edit-sub">開始時の所持点数</span>
                 </div>
-                <div class="uma-field">
-                  <span>3位</span>
-                  <input type="number" value="-10" step="5">
+                <input type="number" value="25000" step="1000">
+              </div>
+
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">返し点 (原点)</span>
+                  <span class="edit-sub">オカ計算の基準点</span>
                 </div>
-                <div class="uma-field">
-                  <span>4位</span>
-                  <input type="number" value="-30" step="5">
+                <input type="number" value="30000" step="1000">
+              </div>
+
+              <!-- 順位ウマ（数値直接入力） -->
+              <div class="edit-card column-layout">
+                <div class="edit-info">
+                  <span class="edit-name">順位ウマ (pt)</span>
+                  <span class="edit-sub">1位 〜 4位の配分点を指定</span>
+                </div>
+                <div class="uma-inputs">
+                  <div class="uma-field">
+                    <span>1位</span>
+                    <input type="number" value="30" step="5">
+                  </div>
+                  <div class="uma-field">
+                    <span>2位</span>
+                    <input type="number" value="10" step="5">
+                  </div>
+                  <div class="uma-field">
+                    <span>3位</span>
+                    <input type="number" value="-10" step="5">
+                  </div>
+                  <div class="uma-field">
+                    <span>4位</span>
+                    <input type="number" value="-30" step="5">
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">100点棒</span>
-                <span class="edit-sub">100点棒の丸め方法を指定</span>
-              </div>
-              <select>
-                <option selected>五捨六入</option>
-                <option>丸めなし（小数点利用）</option>
-                <option>四捨五入</option>
-                <option>切り捨て</option>
-                <option>切り上げ</option>
-              </select>
-            </div>
-
-          </div>
+          </details>
 
           <!-- Section 2: あがり・点数計算 -->
-          <div class="rule-section">
-            <div class="section-title">🀄 あがり・点数計算</div>
+          <details class="rule-section">
+            <summary class="section-title">🀄 あがり・点数計算</summary>
 
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">切り上げ満貫</span>
-                <span class="edit-sub">30符4翻/60符3翻を8000点化</span>
+            <div class="section-content">
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">切り上げ満貫</span>
+                  <span class="edit-sub">30符4翻/60符3翻を8000点化</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider"></span>
+                </label>
               </div>
-              <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-              </label>
-            </div>
 
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">トビ終了 (箱割り)</span>
-                <span class="edit-sub">持ち点0点未満で即終了</span>
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">複数和了時の積棒</span>
+                  <span class="edit-sub">複数人のロンあがり</span>
+                </div>
+                <select>
+                  <option selected>頭ハネ (1名のみ)</option>
+                  <option>全員</option>
+                </select>
               </div>
-              <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-              </label>
             </div>
+          </details>
 
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">箱下精算</span>
-                <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
+          <!-- Section 3: 精算 -->
+          <details class="rule-section">
+            <summary class="section-title">⚙️ 精算</summary>
+            
+            <div class="section-content">
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">100点棒</span>
+                  <span class="edit-sub">100点棒の丸め方法を指定</span>
+                </div>
+                <select>
+                  <option selected>五捨六入</option>
+                  <option>丸めなし（小数点利用）</option>
+                  <option>四捨五入</option>
+                  <option>切り捨て</option>
+                  <option>切り上げ</option>
+                </select>
               </div>
-              <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-              </label>
-            </div>
 
-            <div class="edit-card">
-              <div class="edit-info">
-                <span class="edit-name">複数和了時の積棒</span>
-                <span class="edit-sub">複数人のロンあがり</span>
+              <div class="edit-card">
+                <div class="edit-info">
+                  <span class="edit-name">箱下精算</span>
+                  <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider"></span>
+                </label>
               </div>
-              <select>
-                <option selected>頭ハネ (1名のみ)</option>
-                <option>全員</option>
-              </select>
             </div>
-
-          </div>
+          </details>
+        </div>
 
         <!-- Footer Buttons -->
         <div class="modal-btn-row">
