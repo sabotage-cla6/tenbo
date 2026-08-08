@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>tenbo - 卓作成画面</title>
+  <style>
+    :root {
+      --bg-color: #09170e;
+      --table-bg: radial-gradient(circle, #174028 0%, #0a2114 100%);
+      --card-bg: rgba(20, 48, 31, 0.9);
+      --card-border: #2c5e3d;
+      --accent-gold: #f39c12;
+      --accent-gold-light: #f1c40f;
+      --accent-red: #e74c3c;
+      --accent-blue: #3498db;
+      --accent-green: #2ecc71;
+      --text-main: #f0f4f1;
+      --text-muted: #8e9e94;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      max-width: 420px;
+      padding: 12px 16px;
+      background: rgba(12, 28, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 13px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    main {
+      width: 100%;
+      max-width: 420px;
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .page-title-box {
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .page-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Group Card */
+    .setting-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .card-label {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Form Inputs */
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-label-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .text-input-box {
+      width: 100%;
+      height: 44px;
+      background: #050d08;
+      border: 1.5px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .text-input-box:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    /* Segmented Control (2 or 3 buttons) */
+    .segment-control {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      background: #050d08;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+
+    .segment-btn {
+      padding: 8px 0;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .segment-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    /* Grid Selection for Scores & Uma */
+    .select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    select {
+      width: 100%;
+      height: 42px;
+      padding: 0 10px;
+      border-radius: 10px;
+      background: #050d08;
+      color: #fff;
+      border: 1.5px solid var(--card-border);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    /* Switch Option Row */
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .switch-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text-main);
+    }
+
+    .switch-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* CSS Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: .2s;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #fff;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-gold);
+      border-color: var(--accent-gold);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: #000;
+    }
+
+    /* Create Action Button */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent-gold), #d35400);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .btn-submit:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-icon">点</div>
+      <div class="brand-name">tenbo</div>
+    </div>
+    <button class="btn-close">✕</button>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <div class="page-title-box">
+      <div class="page-title">新規卓の作成</div>
+      <div class="page-sub">ルールを設定して対局ルームを作成します</div>
+    </div>
+
+    <!-- 基本設定カード -->
+    <div class="setting-card">
+      <div class="card-label">🀄 基本情報設定</div>
+
+      <div class="input-field">
+        <div class="input-label-text">
+          <span>卓の名称 (参加者に表示)</span>
+        </div>
+        <input type="text" class="text-input-box" value="金曜夜セット麻雀" placeholder="例: たなか卓">
+      </div>
+
+      <div class="input-field">
+        <div class="input-label-text">
+          <span>対局形式</span>
+        </div>
+        <div class="segment-control">
+          <button class="segment-btn active">四人麻雀 (ヨンマ)</button>
+          <button class="segment-btn">三人麻雀 (サンマ)</button>
+        </div>
+      </div>
+
+      <div class="input-field">
+        <div class="input-label-text">
+          <span>部屋のパスコード (任意)</span>
+        </div>
+        <input type="password" class="text-input-box" placeholder="4桁の数字 (空欄でパスワードなし)" maxlength="4">
+      </div>
+    </div>
+
+    <!-- ルール・点数設定カード -->
+    <div class="setting-card">
+      <div class="card-label">⚙️ 点数・精算ルール</div>
+
+      <div class="select-grid">
+        <div class="input-field">
+          <div class="input-label-text"><span>配給原点</span></div>
+          <select>
+            <option>25,000点</option>
+            <option>26,000点</option>
+            <option>30,000点</option>
+            <option>35,000点 (サンマ)</option>
+          </select>
+        </div>
+
+        <div class="input-field">
+          <div class="input-label-text"><span>返し点 (返し)</span></div>
+          <select>
+            <option>30,000点 (+20)</option>
+            <option>25,000点 (オカなし)</option>
+            <option>40,000点 (サンマ)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="select-grid">
+        <div class="input-field">
+          <div class="input-label-text"><span>ウマ</span></div>
+          <select>
+            <option>10 - 30 (ゴトウ)</option>
+            <option>10 - 20 (ワンツー)</option>
+            <option>20 - 30 (ツーコン)</option>
+            <option>なし (0 - 0)</option>
+          </select>
+        </div>
+
+        <div class="input-field">
+          <div class="input-label-text"><span>赤ドラ</span></div>
+          <select>
+            <option>五55 (各1枚)</option>
+            <option>赤赤金 (サンマ)</option>
+            <option>なし</option>
+          </select>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08);" />
+
+      <!-- トグルスイッチ設定項目 -->
+      <div class="switch-row">
+        <div>
+          <div class="switch-title">トビ終了 (ハコテン)</div>
+          <div class="switch-desc">0点未満で即時終了</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="switch-row">
+        <div>
+          <div class="switch-title">喰いタン・後付け</div>
+          <div class="switch-desc">ありルール</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 作成アクションボタン -->
+    <button class="btn-submit">
+      <span>✨ 卓を作成して部屋に入る</span>
+    </button>
+
+  </main>
+
+</body>
+</html>
