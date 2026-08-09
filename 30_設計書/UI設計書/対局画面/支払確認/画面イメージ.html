@@ -34,13 +34,13 @@
         <div class="flex justify-between items-center px-2 pt-1">
             <div>
                 <h1 class="text-lg font-bold text-slate-200">支払確認</h1>
-                <p class="text-[10px] text-slate-400">移動する点数を直接またはプリセットで入力</p>
+                <p class="text-[10px] text-slate-400">移動する点数を直接入力</p>
             </div>
             <span class="text-xs bg-slate-800 text-amber-400 px-2.5 py-1 rounded-full border border-slate-700">東2局 0本場</span>
         </div>
 
         <!-- 対局画面風 4方向レイアウト -->
-        <div class="mahjong-table relative rounded-xl p-3 grid grid-cols-3 grid-rows-3 gap-2 items-center justify-items-center h-[380px] border-4 border-amber-950">
+        <div class="mahjong-table relative rounded-xl p-3 grid grid-cols-3 grid-rows-3 gap-2 items-center justify-items-center h-[410px] border-4 border-amber-950">
             
             <!-- 対面 (上) -->
             <div id="card-top" class="col-start-2 row-start-1 w-full bg-slate-800/95 border-2 border-red-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
@@ -80,20 +80,23 @@
                 </div>
             </div>
 
-            <!-- 中央：対局卓中央のステータス ＆ 点数プリセット -->
-            <div class="col-start-2 row-start-2 w-full h-full bg-slate-950/90 border border-slate-700/80 rounded-lg p-2 flex flex-col justify-between items-center text-center shadow-inner">
-                <div class="text-[10px] font-bold text-amber-400">クイック設定</div>
+            <!-- 中央：供託エリア ＆ 合計受取額のみ表示 -->
+            <div class="col-start-2 row-start-2 w-full h-full bg-slate-950/90 border border-amber-500/50 rounded-lg p-2 flex flex-col justify-around items-center text-center shadow-inner">
                 
-                <!-- プリセットボタン -->
-                <div class="grid grid-cols-2 gap-1 w-full text-[10px]">
-                    <button onclick="applyPreset(1000)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">1,000</button>
-                    <button onclick="applyPreset(2000)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">2,000</button>
-                    <button onclick="applyPreset(3900)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">3,900</button>
-                    <button onclick="applyPreset(7700)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 rounded border border-slate-700">7,700</button>
+                <!-- 供託入力エリア -->
+                <div class="w-full bg-amber-950/40 border border-amber-600/40 rounded p-1.5">
+                    <div class="flex justify-between items-center text-[9px] mb-1">
+                        <span class="text-amber-400 font-bold">供託</span>
+                        <span class="text-slate-400">現在 1,000点</span>
+                    </div>
+                    <div class="relative flex items-center">
+                        <input type="number" id="input-kyotaku" value="0" step="1000" min="0" oninput="calculateTotal()" 
+                            class="w-full bg-slate-950 border border-amber-500/60 focus:border-amber-400 focus:outline-none rounded px-1.5 py-1 text-right font-mono font-bold text-amber-300 text-xs">
+                    </div>
                 </div>
 
                 <!-- 合計移動点数 -->
-                <div class="w-full bg-slate-900/90 rounded py-0.5 border border-slate-800">
+                <div class="w-full bg-slate-900/90 rounded py-1.5 border border-slate-800">
                     <span class="text-[9px] text-slate-400 block">合計受取額</span>
                     <span id="total-display" class="text-sm font-bold text-yellow-400 font-mono">1,000 点</span>
                 </div>
@@ -144,22 +147,23 @@
 
     <script>
         let currentWinType = 'ron';
-        let targetPlayer = 'top'; // ロン時の選択プレイヤー
+        let targetPlayer = 'top';
 
         function calculateTotal() {
             const topVal = parseInt(document.getElementById('input-top').value) || 0;
             const leftVal = parseInt(document.getElementById('input-left').value) || 0;
             const rightVal = parseInt(document.getElementById('input-right').value) || 0;
+            const kyotakuVal = parseInt(document.getElementById('input-kyotaku').value) || 0;
 
-            const total = topVal + leftVal + rightVal;
+            // プレイヤーからの受取 ＋ 供託への支払い/受取の計算
+            const total = topVal + leftVal + rightVal - kyotakuVal;
+            
             document.getElementById('total-display').innerText = total.toLocaleString() + ' 点';
-            document.getElementById('self-receive-display').innerText = '+' + total.toLocaleString();
+            document.getElementById('self-receive-display').innerText = (total >= 0 ? '+' : '') + total.toLocaleString();
         }
 
         function setWinType(type) {
             currentWinType = type;
-            const ronBtn = document.getElementById('btn-ron');
-            const tsumoBtn = document.getElementById('btn-tsumo');
 
             const inputs = {
                 top: document.getElementById('input-top'),
@@ -180,10 +184,7 @@
             };
 
             if (type === 'ron') {
-                ronBtn.className = 'py-2 rounded-lg font-bold text-xs bg-red-600 text-white shadow transition';
-                tsumoBtn.className = 'py-2 rounded-lg font-bold text-xs bg-slate-800 text-slate-400 hover:text-white transition';
-
-                // ロンモード：対面（top）のみ有効化
+                // ロンモード：対象プレイヤー（初期値は対面）のみ有効化
                 ['top', 'left', 'right'].forEach(p => {
                     if (p === targetPlayer) {
                         inputs[p].disabled = false;
@@ -200,9 +201,6 @@
                     }
                 });
             } else {
-                tsumoBtn.className = 'py-2 rounded-lg font-bold text-xs bg-blue-600 text-white shadow transition';
-                ronBtn.className = 'py-2 rounded-lg font-bold text-xs bg-slate-800 text-slate-400 hover:text-white transition';
-
                 // ツモモード：全員有効化
                 ['top', 'left', 'right'].forEach(p => {
                     inputs[p].disabled = false;
@@ -211,18 +209,6 @@
                     roles[p].className = 'text-blue-300 font-semibold px-1 rounded bg-blue-950/80';
                     roles[p].innerText = '支払者';
                 });
-            }
-            calculateTotal();
-        }
-
-        function applyPreset(amount) {
-            if (currentWinType === 'ron') {
-                document.getElementById('input-' + targetPlayer).value = amount;
-            } else {
-                // ツモ時は各自均等などにセット（子の負担額想定）
-                document.getElementById('input-top').value = amount;
-                document.getElementById('input-left').value = amount;
-                document.getElementById('input-right').value = amount;
             }
             calculateTotal();
         }
