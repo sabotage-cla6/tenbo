@@ -15,6 +15,7 @@
       --accent-red: #e74c3c;
       --accent-blue: #3498db;
       --accent-orange: #e67e22;
+      --accent-green: #2ecc71;
       --text-main: #f0f4f1;
       --text-muted: #8e9e94;
       --dealer-color: #e67e22;
@@ -250,7 +251,7 @@
       min-height: 16px;
     }
 
-    /* 立直バッジ（点数表示の下へ移動） */
+    /* 立直バッジ */
     .riichi-badge {
       display: none;
       background: linear-gradient(135deg, #e74c3c, #c0392b);
@@ -272,7 +273,7 @@
       align-items: center;
     }
 
-    /* 焼き鳥マーク (Yakitori Badge - 点数表示の下へ移動) */
+    /* 焼き鳥マーク */
     .yakitori-badge {
       background: linear-gradient(135deg, #d35400, #c0392b);
       border: 1px solid #f39c12;
@@ -354,20 +355,32 @@
       border-radius: 50%;
     }
 
-    /* Control Dock */
+    /* Control Dock Structure Update */
     .control-dock {
       width: 100%;
       max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-grid-top {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
 
+    .control-grid-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
     .btn-action {
-      padding: 12px 10px;
+      padding: 10px 8px;
       border-radius: 12px;
       border: none;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -402,6 +415,13 @@
     .btn-transfer {
       background: linear-gradient(135deg, #2980b9, #1f618d);
       color: #fff;
+    }
+
+    /* 次局へボタンのスタイル */
+    .btn-next-round {
+      background: linear-gradient(135deg, #27ae60, #1e8449);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .btn-subtext {
@@ -502,7 +522,7 @@
     </div>
 
     <div class="header-info">
-      <div>東1局 0本場</div>
+      <div id="header-round">東1局 0本場</div>
       <div>配点: <span>25,000</span></div>
     </div>
 
@@ -522,7 +542,6 @@
         </div>
         <div class="player-score" id="score-south">23,000</div>
         <div class="score-diff minus">-2,000</div>
-        <!-- 点数表示の下に移動したステータス領域 -->
         <div class="player-bottom-status">
           <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
           <div class="yakitori-badge" title="焼き鳥（未あがり）">
@@ -540,7 +559,6 @@
         </div>
         <div class="player-score" id="score-west">24,000</div>
         <div class="score-diff minus">-1,000</div>
-        <!-- 点数表示の下に移動したステータス領域 -->
         <div class="player-bottom-status">
           <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
           <div class="yakitori-badge" title="焼き鳥（未あがり）">
@@ -552,8 +570,8 @@
 
       <!-- Center Board Status -->
       <div class="center-board">
-        <div class="round-title">東 1 局</div>
-        <div class="honba-badge">0 本場</div>
+        <div class="round-title" id="board-round-title">東 1 局</div>
+        <div class="honba-badge" id="board-honba">0 本場</div>
         <div class="kyotaku-container">
           <div class="riichi-stick-icon"></div>
           <span style="color:var(--text-muted); font-size:10px;">:</span>
@@ -569,7 +587,6 @@
         </div>
         <div class="player-score" id="score-north">21,500</div>
         <div class="score-diff minus">-3,500</div>
-        <!-- 点数表示の下に移動したステータス領域 -->
         <div class="player-bottom-status">
           <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
         </div>
@@ -583,7 +600,6 @@
         </div>
         <div class="player-score" id="score-east">31,500</div>
         <div class="score-diff plus">+6,500</div>
-        <!-- 点数表示の下に移動したステータス領域 -->
         <div class="player-bottom-status">
           <div class="riichi-badge"><span class="riichi-text">⚡ 立直</span></div>
           <div class="yakitori-badge" title="焼き鳥（未あがり）">
@@ -597,26 +613,63 @@
 
     <!-- Action Control Dock -->
     <div class="control-dock">
-      <button class="btn-action btn-agari" onclick="openModal('agari-modal')">
-        <span>🀄 和了</span>
-        <span class="btn-subtext">ロン / ツモ 点数入力</span>
-      </button>
+      <div class="control-grid-top">
+        <button class="btn-action btn-agari" onclick="openModal('agari-modal')">
+          <span>🀄 和了</span>
+          <span class="btn-subtext">ロン / ツモ 点数入力</span>
+        </button>
 
-      <button class="btn-action btn-riichi" onclick="toggleRiichi('south')">
-        <span>⚡ リーチ</span>
-      </button>
+        <button class="btn-action btn-riichi" onclick="toggleRiichi('south')">
+          <span>⚡ リーチ</span>
+          <span class="btn-subtext">1,000点供託</span>
+        </button>
+      </div>
 
-      <button class="btn-action btn-ryukyoku" onclick="openModal('ryukyoku-modal')">
-        <span>🔄 流局</span>
-        <span class="btn-subtext">聴牌 / 伏聴精算</span>
-      </button>
+      <div class="control-grid-bottom">
+        <button class="btn-action btn-ryukyoku" onclick="openModal('ryukyoku-modal')">
+          <span>🔄 流局</span>
+          <span class="btn-subtext">聴牌精算</span>
+        </button>
 
-      <button class="btn-action btn-transfer" onclick="openModal('transfer-modal')">
-        <span>💸 点棒移動</span>
-        <span class="btn-subtext">任意プレイヤー間</span>
-      </button>
+        <button class="btn-action btn-transfer" onclick="openModal('transfer-modal')">
+          <span>💸 移動</span>
+          <span class="btn-subtext">点棒移動</span>
+        </button>
+
+        <!-- 新規追加：次局へボタン -->
+        <button class="btn-action btn-next-round" onclick="openModal('next-round-modal')">
+          <span>⏩ 次局へ</span>
+          <span class="btn-subtext">局・親更新</span>
+        </button>
+      </div>
     </div>
   </main>
+
+  <!-- Next Round Modal (新規追加) -->
+  <div class="modal-overlay" id="next-round-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>⏩ 局の進行（次局へ）</span>
+        <span class="modal-close" onclick="closeModal('next-round-modal')">&times;</span>
+      </div>
+      <div class="modal-body">
+        <label style="font-size:12px; color:var(--text-muted);">局の移動パターン:</label>
+        <select id="round-advance-type">
+          <option value="next">親移動（次の局へ / 本場クリア）</option>
+          <option value="renchan">親連荘（同一局のまま / +1本場）</option>
+          <option value="ryukyoku_renchan">流局連荘（同一局のまま / +1本場）</option>
+        </select>
+        
+        <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+          ※立直棒のクリアや次局へのセットを自動適用します。
+        </p>
+      </div>
+      <div class="modal-btn-row">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('next-round-modal')">キャンセル</button>
+        <button class="modal-btn modal-btn-primary" onclick="advanceRound()">確定して次局へ</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Agari Modal Simulation -->
   <div class="modal-overlay" id="agari-modal">
@@ -716,6 +769,8 @@
       north: 21500
     };
     let kyotaku = 1000;
+    let currentRoundNum = 1; // 局数（1: 東1局, 2: 東2局...）
+    let currentHonba = 0;    // 本場数
     let riichiState = { east: true, south: false, west: false, north: false };
 
     function openModal(id) {
@@ -755,6 +810,34 @@
 
       alert('和了を適用しました（焼き鳥マークを更新しました）');
       closeModal('agari-modal');
+    }
+
+    // 新規追加：次局進行用のJS処理
+    function advanceRound() {
+      const type = document.getElementById('round-advance-type').value;
+
+      if (type === 'next') {
+        currentRoundNum += 1;
+        currentHonba = 0;
+      } else {
+        currentHonba += 1;
+      }
+
+      // 画面表示の更新
+      const roundText = `東${currentRoundNum}局`;
+      const honbaText = `${currentHonba}本場`;
+      
+      document.getElementById('header-round').innerText = `${roundText} ${honbaText}`;
+      document.getElementById('board-round-title').innerText = `東 ${currentRoundNum} 局`;
+      document.getElementById('board-honba').innerText = `${currentHonba} 本場`;
+
+      // 立直状態のクリア
+      ['south', 'west', 'north', 'east'].forEach(player => {
+        riichiState[player] = false;
+        document.getElementById('player-' + player).classList.remove('is-riichi');
+      });
+
+      closeModal('next-round-modal');
     }
   </script>
 </body>
