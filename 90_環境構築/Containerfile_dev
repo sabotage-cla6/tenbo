@@ -1,0 +1,41 @@
+FROM sabotagecla6/flutter-dev
+
+WORKDIR /install
+
+ARG USER_ID
+ARG GROUP_ID
+ARG USER
+ARG ROOT_PASSWD
+ARG NO_PASSWD
+
+ARG INPUT_METHOD
+
+ARG GIT_USER
+ARG GIT_EMAIL
+
+ENV PULSE_COOKIE=/tmp/pulse/cookie
+ENV PULSE_SERVER=unix:/tmp/pulse/native
+ENV XDG_RUNTIME_DIR=/run/user/${USER_ID}
+ENV DBUS_SESSION_BUS_ADDRESS=unix:path=${XDG_RUNTIME_DIR}/bus
+ENV XAUTHORITY=/home/${USER}/.Xauthority
+
+ENV GTK_IM_MODULE=${INPUT_METHOD} \
+    QT_IM_MODULE=${INPUT_METHOD} \
+    XMODIFIERS=@im=${INPUT_METHOD} \
+    DefalutIMModule=${INPUT_METHOD}
+
+# ***********************************************
+# create user, install extensions
+# ***********************************************
+RUN /install/create-user.sh
+RUN chmod u+x /install/setup-extensions.sh
+RUN /install/setup-extensions.sh
+
+RUN sudo -u ${USER} git config --global user.name "${GIT_USER}" \
+    && sudo -u ${USER} git config --global user.email "${GIT_EMAIL}"
+
+
+WORKDIR /home/${USER}
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["code","-w"]
