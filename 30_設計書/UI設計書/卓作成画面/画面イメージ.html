@@ -118,51 +118,135 @@
       margin-top: 4px;
     }
 
-    /* Group Card */
-    .setting-card {
+    /* Standard Card / Collapsible Group Card */
+    .setting-card, details.setting-card {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
       border-radius: 16px;
       padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
     }
 
-    .card-label {
+    .card-label-static {
       font-size: 13px;
       font-weight: bold;
       color: var(--accent-gold);
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    /* Form Inputs */
-    .input-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .input-label-text {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
       justify-content: space-between;
     }
 
+    summary.card-label {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary.card-label::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chevron-icon {
+      font-size: 10px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    details[open] summary .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    /* Copy Button Specific Style */
+    .btn-copy {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(243, 156, 18, 0.12);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 8px;
+      color: var(--accent-gold-light);
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy:active {
+      background: rgba(243, 156, 18, 0.25);
+      transform: scale(0.98);
+    }
+
+    /* Row Layout (Left: Label, Right: Control) */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 40px;
+    }
+
+    .setting-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .setting-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text-main);
+    }
+
+    .setting-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .setting-control {
+      width: 140px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .setting-control.wide {
+      width: 180px;
+    }
+
+    /* Form Inputs & Controls */
     .text-input-box {
       width: 100%;
-      height: 44px;
+      height: 38px;
       background: #050d08;
       border: 1.5px solid var(--card-border);
-      border-radius: 10px;
-      padding: 0 12px;
-      font-size: 14px;
+      border-radius: 8px;
+      padding: 0 10px;
+      font-size: 13px;
       font-weight: bold;
       color: #fff;
+      text-align: right;
       user-select: text;
       -webkit-user-select: text;
     }
@@ -172,24 +256,50 @@
       border-color: var(--accent-gold);
     }
 
-    /* Segmented Control (2 or 3 buttons) */
+    .text-input-box.left-align {
+      text-align: left;
+    }
+
+    /* Point Input with Unit Badge */
+    .input-with-unit {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .input-with-unit .text-input-box {
+      padding-right: 32px;
+    }
+
+    .unit-badge {
+      position: absolute;
+      right: 10px;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Segmented Control */
     .segment-control {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
+      gap: 4px;
       background: #050d08;
-      padding: 4px;
-      border-radius: 10px;
+      padding: 3px;
+      border-radius: 8px;
       border: 1px solid var(--card-border);
+      width: 100%;
     }
 
     .segment-btn {
-      padding: 8px 0;
+      padding: 6px 0;
       border: none;
-      border-radius: 7px;
+      border-radius: 6px;
       background: transparent;
       color: var(--text-muted);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -200,23 +310,17 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
 
-    /* Grid Selection for Scores & Uma */
-    .select-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
     select {
       width: 100%;
-      height: 42px;
-      padding: 0 10px;
-      border-radius: 10px;
+      height: 38px;
+      padding: 0 8px;
+      border-radius: 8px;
       background: #050d08;
       color: #fff;
       border: 1.5px solid var(--card-border);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
+      text-align: right;
     }
 
     select:focus {
@@ -224,23 +328,78 @@
       border-color: var(--accent-gold);
     }
 
-    /* Switch Option Row */
-    .switch-row {
+    /* Custom Box (Uma / Rounding) */
+    .custom-expand-box {
+      background: #050d08;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 0;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .switch-title {
+    .custom-expand-box.hidden {
+      display: none;
+    }
+
+    .uma-rank-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .uma-rank-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .uma-rank-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: bold;
+    }
+
+    .short-input-box {
+      width: 100%;
+      height: 34px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .short-input-box:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    .short-input-box:disabled {
+      opacity: 0.6;
+      background: #000;
+      cursor: not-allowed;
+    }
+
+    /* Custom Rounding Rule Layout */
+    .rounding-custom-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       font-size: 13px;
       font-weight: bold;
       color: var(--text-main);
     }
 
-    .switch-desc {
-      font-size: 10px;
-      color: var(--text-muted);
+    .rounding-custom-row input {
+      width: 50px;
     }
 
     /* CSS Switch */
@@ -289,9 +448,16 @@
       background-color: #000;
     }
 
-    /* Create Action Button */
+    /* Action Buttons Container */
+    .action-buttons-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    /* Action Buttons */
     .btn-submit {
-      width: 100%;
+      flex: 2;
       padding: 14px;
       border-radius: 12px;
       border: none;
@@ -305,10 +471,31 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      margin-top: 8px;
     }
 
     .btn-submit:active {
+      transform: translateY(1px);
+    }
+
+    .btn-home {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-home:active {
+      background: rgba(255, 255, 255, 0.05);
       transform: translateY(1px);
     }
   </style>
@@ -333,112 +520,287 @@
     </div>
 
     <!-- 基本設定カード -->
+    <details class="setting-card" open>
+      <summary class="card-label">
+        <span class="summary-title">📝 基本情報設定</span>
+        <span class="chevron-icon">▼</span>
+      </summary>
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">卓の名称</span>
+            <span class="setting-desc">参加者に表示される名前</span>
+          </div>
+          <div class="setting-control wide">
+            <input type="text" class="text-input-box left-align" value="金曜夜セット麻雀" placeholder="例: たなか卓">
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">パスコード</span>
+            <span class="setting-desc">入室用(任意・4桁)</span>
+          </div>
+          <div class="setting-control">
+            <input type="password" class="text-input-box" placeholder="なし" maxlength="4">
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 既存卓コピー セクション -->
     <div class="setting-card">
-      <div class="card-label">🀄 基本情報設定</div>
-
-      <div class="input-field">
-        <div class="input-label-text">
-          <span>卓の名称 (参加者に表示)</span>
-        </div>
-        <input type="text" class="text-input-box" value="金曜夜セット麻雀" placeholder="例: たなか卓">
+      <div class="card-label-static">
+        <span class="summary-title">📋 既存卓情報コピー</span>
       </div>
-
-      <div class="input-field">
-        <div class="input-label-text">
-          <span>対局形式</span>
-        </div>
-        <div class="segment-control">
-          <button class="segment-btn active">四人麻雀 (ヨンマ)</button>
-          <button class="segment-btn">三人麻雀 (サンマ)</button>
-        </div>
-      </div>
-
-      <div class="input-field">
-        <div class="input-label-text">
-          <span>部屋のパスコード (任意)</span>
-        </div>
-        <input type="password" class="text-input-box" placeholder="4桁の数字 (空欄でパスワードなし)" maxlength="4">
+      <div class="card-body" style="margin-top: 10px;">
+        <button class="btn-copy">
+          <span>既存の卓から設定を読み込む</span>
+        </button>
       </div>
     </div>
 
-    <!-- ルール・点数設定カード -->
-    <div class="setting-card">
-      <div class="card-label">⚙️ 点数・精算ルール</div>
-
-      <div class="select-grid">
-        <div class="input-field">
-          <div class="input-label-text"><span>配給原点</span></div>
-          <select>
-            <option>25,000点</option>
-            <option>26,000点</option>
-            <option>30,000点</option>
-            <option>35,000点 (サンマ)</option>
-          </select>
+    <!-- 対局形式カード -->
+    <details class="setting-card" open>
+      <summary class="card-label">
+        <span class="summary-title">🀄 対局形式</span>
+        <span class="chevron-icon">▼</span>
+      </summary>
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">人数設定</span>
+          </div>
+          <div class="setting-control wide">
+            <div class="segment-control">
+              <button class="segment-btn active">四人麻雀</button>
+              <button class="segment-btn">三人麻雀</button>
+            </div>
+          </div>
         </div>
 
-        <div class="input-field">
-          <div class="input-label-text"><span>返し点 (返し)</span></div>
-          <select>
-            <option>30,000点 (+20)</option>
-            <option>25,000点 (オカなし)</option>
-            <option>40,000点 (サンマ)</option>
-          </select>
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">配給原点</span>
+          </div>
+          <div class="setting-control">
+            <select>
+              <option>25,000点</option>
+              <option>26,000点</option>
+              <option>30,000点</option>
+              <option>35,000点</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">返し点</span>
+          </div>
+          <div class="setting-control">
+            <select>
+              <option>30,000点</option>
+              <option>25,000点</option>
+              <option>40,000点</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">ウマ</span>
+          </div>
+          <div class="setting-control">
+            <select id="uma-select" onchange="toggleCustomUma()">
+              <option value="10-30">10 - 30</option>
+              <option value="10-20">10 - 20</option>
+              <option value="5-10">5 - 10</option>
+              <option value="none">なし</option>
+              <option value="custom">その他</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ウマ：その他選択時の詳細設定フォーム -->
+        <div id="custom-uma-container" class="custom-expand-box hidden">
+          <div class="setting-desc">1着〜4着のウマ(pt)を直接指定</div>
+          <div class="uma-rank-grid">
+            <div class="uma-rank-item">
+              <span class="uma-rank-label">1着</span>
+              <input type="number" class="short-input-box" value="30" placeholder="+30">
+            </div>
+            <div class="uma-rank-item">
+              <span class="uma-rank-label">2着</span>
+              <input type="number" class="short-input-box" value="10" placeholder="+10">
+            </div>
+            <div class="uma-rank-item">
+              <span class="uma-rank-label">3着</span>
+              <input type="number" class="short-input-box" value="-10" placeholder="-10">
+            </div>
+            <div class="uma-rank-item">
+              <span class="uma-rank-label">4着</span>
+              <input type="number" class="short-input-box" value="-30" placeholder="-30">
+            </div>
+          </div>
         </div>
       </div>
+    </details>
 
-      <div class="select-grid">
-        <div class="input-field">
-          <div class="input-label-text"><span>ウマ</span></div>
-          <select>
-            <option>10 - 30 (ゴトウ)</option>
-            <option>10 - 20 (ワンツー)</option>
-            <option>20 - 30 (ツーコン)</option>
-            <option>なし (0 - 0)</option>
-          </select>
+    <!-- 積み棒設定カード -->
+    <details class="setting-card" open>
+      <summary class="card-label">
+        <span class="summary-title">🥢 積み棒設定</span>
+        <span class="chevron-icon">▼</span>
+      </summary>
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">点数</span>
+            <span class="setting-desc">1本あたりの加算点</span>
+          </div>
+          <div class="setting-control">
+            <div class="input-with-unit">
+              <input type="number" class="text-input-box" value="300" placeholder="300" step="100">
+              <span class="unit-badge">点</span>
+            </div>
+          </div>
         </div>
 
-        <div class="input-field">
-          <div class="input-label-text"><span>赤ドラ</span></div>
-          <select>
-            <option>五55 (各1枚)</option>
-            <option>赤赤金 (サンマ)</option>
-            <option>なし</option>
-          </select>
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">複数ロン時</span>
+            <span class="setting-desc">ダブロン等の積み棒分配</span>
+          </div>
+          <div class="setting-control">
+            <select>
+              <option value="head-bump">頭ハネ</option>
+              <option value="all">全員</option>
+            </select>
+          </div>
         </div>
       </div>
+    </details>
 
-      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08);" />
-
-      <!-- トグルスイッチ設定項目 -->
-      <div class="switch-row">
-        <div>
-          <div class="switch-title">トビ終了 (ハコテン)</div>
-          <div class="switch-desc">0点未満で即時終了</div>
+    <!-- 精算設定カード -->
+    <details class="setting-card" open>
+      <summary class="card-label">
+        <span class="summary-title">🧮 精算設定</span>
+        <span class="chevron-icon">▼</span>
+      </summary>
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">箱下精算</span>
+            <span class="setting-desc">マイナス分も精算に反映</span>
+          </div>
+          <div class="setting-control">
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="switch-row">
-        <div>
-          <div class="switch-title">喰いタン・後付け</div>
-          <div class="switch-desc">ありルール</div>
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">飛び賞</span>
+          </div>
+          <div class="setting-control">
+            <div class="input-with-unit">
+              <input type="number" class="text-input-box" value="10" placeholder="0">
+              <span class="unit-badge">pt</span>
+            </div>
+          </div>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">焼き鳥</span>
+          </div>
+          <div class="setting-control">
+            <div class="input-with-unit">
+              <input type="number" class="text-input-box" value="10" placeholder="0">
+              <span class="unit-badge">pt</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <span class="setting-title">端数処理</span>
+            <span class="setting-desc">ポイント計算時の丸め方式</span>
+          </div>
+          <div class="setting-control">
+            <select id="rounding-select" onchange="toggleCustomRounding()">
+              <option value="round">四捨五入</option>
+              <option value="5cut6in">五捨六入</option>
+              <option value="none">丸めなし (小数あり)</option>
+              <option value="ceil">切り上げ</option>
+              <option value="floor">切り捨て</option>
+              <option value="custom">その他</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 端数処理：その他選択時の詳細設定フォーム -->
+        <div id="custom-rounding-container" class="custom-expand-box hidden">
+          <div class="setting-desc">「捨」の数字を入力すると「入」が自動計算されます</div>
+          <div class="rounding-custom-row">
+            <input type="number" id="cut-val" class="short-input-box" value="5" min="0" max="8" oninput="autoCalculateIn()">
+            <span>捨</span>
+            <input type="number" id="in-val" class="short-input-box" value="6" disabled>
+            <span>入</span>
+          </div>
+        </div>
+
       </div>
+    </details>
+
+    <!-- アクションボタンエリア -->
+    <div class="action-buttons-box">
+      <button class="btn-home">
+        <span>🏠 ホーム</span>
+      </button>
+      <button class="btn-submit">
+        <span>✨ 卓を作成して部屋に入る</span>
+      </button>
     </div>
-
-    <!-- 作成アクションボタン -->
-    <button class="btn-submit">
-      <span>✨ 卓を作成して部屋に入る</span>
-    </button>
 
   </main>
+
+  <script>
+    function toggleCustomUma() {
+      const select = document.getElementById('uma-select');
+      const customContainer = document.getElementById('custom-uma-container');
+      if (select.value === 'custom') {
+        customContainer.classList.remove('hidden');
+      } else {
+        customContainer.classList.add('hidden');
+      }
+    }
+
+    function toggleCustomRounding() {
+      const select = document.getElementById('rounding-select');
+      const customContainer = document.getElementById('custom-rounding-container');
+      if (select.value === 'custom') {
+        customContainer.classList.remove('hidden');
+      } else {
+        customContainer.classList.add('hidden');
+      }
+    }
+
+    function autoCalculateIn() {
+      const cutInput = document.getElementById('cut-val');
+      const inInput = document.getElementById('in-val');
+      const cutVal = parseInt(cutInput.value, 10);
+
+      if (!isNaN(cutVal) && cutVal >= 0 && cutVal <= 8) {
+        inInput.value = cutVal + 1;
+      } else if (cutInput.value === '') {
+        inInput.value = '';
+      }
+    }
+  </script>
 
 </body>
 </html>
