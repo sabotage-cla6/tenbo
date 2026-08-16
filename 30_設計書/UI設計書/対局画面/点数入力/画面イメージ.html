@@ -283,6 +283,8 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.7);
       max-height: 90vh;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
 
     .modal-header {
@@ -293,6 +295,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .modal-body {
@@ -300,12 +303,13 @@
       flex-direction: column;
       gap: 10px;
       margin-bottom: 16px;
-    }
+      flex: 1;      min-height: 0;    }
 
     .modal-btn-row {
       display: grid;
       gap: 8px;
       grid-template-columns: repeat(2, 1fr);
+      flex-shrink: 0;
     }
 
     .modal-btn {
@@ -332,6 +336,7 @@
       padding: 8px 10px;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
     }
 
     .setting-label {
@@ -392,6 +397,21 @@
       color: #fff;
       border: 1px solid var(--card-border);
       font-size: 13px;
+    }
+
+    .score-selection-scroll-container {
+      flex: 1;      min-height: 0;      overflow-y: auto;
+      padding-right: 4px;
+      border-radius: 6px;
+    }
+
+    .score-selection-scroll-container::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .score-selection-scroll-container::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 4px;
     }
 
     .score-grid {
@@ -517,35 +537,37 @@
         </div>
 
         <!-- 点数・役の選択エリア -->
-        <div style="margin-top: 4px;">
-          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom: 6px;">点数・役の選択:</label>
-          <div class="score-grid">
-            <button class="modal-btn modal-btn-secondary">300<br />500</button>
-            <button class="modal-btn modal-btn-secondary"> 500<br />1,000</button>
-            <button class="modal-btn modal-btn-secondary">1,000<br />2,000</button>
-            <button class="modal-btn modal-btn-secondary">2,000<br />3,900</button>
-            <button class="modal-btn modal-btn-secondary">400<br />700</button>
-            <button class="modal-btn modal-btn-secondary">2,600</button>
-            <button class="modal-btn modal-btn-secondary">5,200</button>
-            <button class="modal-btn modal-btn-disable"></button>
-            <button class="modal-btn modal-btn-secondary">400<br />800</button>
-            <button class="modal-btn modal-btn-secondary">3,200</button>
-            <button class="modal-btn modal-btn-secondary">6,400</button>
-            <button class="modal-btn modal-btn-disable"></button>
-            <button class="modal-btn modal-btn-primary">満貫</button>
-            <button class="modal-btn modal-btn-secondary">跳満</button>
-            <button class="modal-btn modal-btn-secondary">倍満</button>
-            <button class="modal-btn modal-btn-secondary">三倍満</button>
-            <button class="modal-btn modal-btn-secondary">役満</button>
-            <button class="modal-btn modal-btn-disable"></button>
-            <button class="modal-btn modal-btn-disable"></button>
-            <button class="modal-btn modal-btn-disable"></button>
-            <button class="modal-btn modal-btn-secondary">2,300</button>
-            <button class="modal-btn modal-btn-secondary">4,500</button>
-            <button class="modal-btn modal-btn-secondary">800<br />1,800</button>
-            <button class="modal-btn modal-btn-secondary">5,800</button>
-            <button class="modal-btn modal-btn-secondary">900<br />1,800</button>
-            <button class="modal-btn modal-btn-secondary modal-btn-wide">その他(支払者が設定)</button>
+        <div style="margin-top: 4px; display: flex; flex-direction: column; flex: 1; min-height: 0;">
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom: 6px; flex-shrink: 0;">点数・役の選択:</label>
+          <div class="score-selection-scroll-container">
+            <div class="score-grid">
+              <button class="modal-btn modal-btn-secondary">300<br />500</button>
+              <button class="modal-btn modal-btn-secondary"> 500<br />1,000</button>
+              <button class="modal-btn modal-btn-secondary">1,000<br />2,000</button>
+              <button class="modal-btn modal-btn-secondary">2,000<br />3,900</button>
+              <button class="modal-btn modal-btn-secondary">400<br />700</button>
+              <button class="modal-btn modal-btn-secondary">2,600</button>
+              <button class="modal-btn modal-btn-secondary">5,200</button>
+              <button class="modal-btn modal-btn-disable"></button>
+              <button class="modal-btn modal-btn-secondary">400<br />800</button>
+              <button class="modal-btn modal-btn-secondary">3,200</button>
+              <button class="modal-btn modal-btn-secondary">6,400</button>
+              <button class="modal-btn modal-btn-disable"></button>
+              <button class="modal-btn modal-btn-primary">満貫</button>
+              <button class="modal-btn modal-btn-secondary">跳満</button>
+              <button class="modal-btn modal-btn-secondary">倍満</button>
+              <button class="modal-btn modal-btn-secondary">三倍満</button>
+              <button class="modal-btn modal-btn-secondary">役満</button>
+              <button class="modal-btn modal-btn-secondary">○倍役満</button>
+              <button class="modal-btn modal-btn-disable"></button>
+              <button class="modal-btn modal-btn-disable"></button>
+              <button class="modal-btn modal-btn-secondary">2,300</button>
+              <button class="modal-btn modal-btn-secondary">4,500</button>
+              <button class="modal-btn modal-btn-secondary">800<br />1,800</button>
+              <button class="modal-btn modal-btn-secondary">5,800</button>
+              <button class="modal-btn modal-btn-secondary">900<br />1,800</button>
+              <button class="modal-btn modal-btn-secondary modal-btn-wide">その他(支払者が設定)</button>
+            </div>
           </div>
         </div>
       </div>

@@ -14,13 +14,11 @@
             background-color: #065f46;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
-        /* クロム、サファリ、エッジの数値入力の矢印を非表示 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none;
             margin: 0;
         }
-        /* Firefoxの数値入力矢印非表示 */
         input[type=number] {
             -moz-appearance: textfield;
         }
@@ -39,8 +37,19 @@
             <span class="text-xs bg-slate-800 text-amber-400 px-2.5 py-1 rounded-full border border-slate-700">東2局 0本場</span>
         </div>
 
+        <!-- 支払区分プルダウンの追加 -->
+        <div class="px-2">
+            <label for="payment-type" class="block text-xs font-semibold text-slate-300 mb-1">支払区分</label>
+            <select id="payment-type" class="w-full bg-slate-950 border border-slate-700 focus:border-amber-400 focus:outline-none rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+                <option value="ron">放銃</option>
+                <option value="tsumo">ツモ</option>
+                <option value="chombo">沖和</option>
+                <option value="penalty">ペナルティ</option>
+            </select>
+        </div>
+
         <!-- 対局画面風 4方向レイアウト -->
-        <div class="mahjong-table relative rounded-xl p-3 grid grid-cols-3 grid-rows-3 gap-2 items-center justify-items-center h-[410px] border-4 border-amber-950">
+        <div class="mahjong-table relative rounded-xl p-3 grid grid-cols-3 grid-rows-3 gap-2 items-center justify-items-center h-[380px] border-4 border-amber-950">
             
             <!-- 対面 (上) -->
             <div id="card-top" class="col-start-2 row-start-1 w-full bg-slate-800/95 border-2 border-red-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
@@ -51,7 +60,6 @@
                 <div class="font-bold text-xs truncate max-w-[90px]">対面 (Aさん)</div>
                 <div class="text-[11px] font-mono text-slate-300">25,000点</div>
                 
-                <!-- 点数入力欄 -->
                 <div class="w-full mt-1">
                     <div class="text-[9px] text-slate-400 text-left mb-0.5">支払額 (点)</div>
                     <div class="relative flex items-center">
@@ -70,7 +78,6 @@
                 <div class="font-bold text-xs truncate max-w-[90px]">上手 (Bさん)</div>
                 <div class="text-[11px] font-mono text-slate-300">25,000点</div>
                 
-                <!-- 点数入力欄 -->
                 <div class="w-full mt-1">
                     <div class="text-[9px] text-slate-400 text-left mb-0.5">支払額 (点)</div>
                     <div class="relative flex items-center">
@@ -80,38 +87,21 @@
                 </div>
             </div>
 
-            <!-- 中央：供託エリア ＆ 合計受取額のみ表示 -->
-            <div class="col-start-2 row-start-2 w-full h-full bg-slate-950/90 border border-amber-500/50 rounded-lg p-2 flex flex-col justify-around items-center text-center shadow-inner">
-                
-                <!-- 供託入力エリア -->
-                <div class="w-full bg-amber-950/40 border border-amber-600/40 rounded p-1.5">
-                    <div class="flex justify-between items-center text-[9px] mb-1">
-                        <span class="text-amber-400 font-bold">供託</span>
-                        <span class="text-slate-400">現在 1,000点</span>
-                    </div>
-                    <div class="relative flex items-center">
-                        <input type="number" id="input-kyotaku" value="0" step="1000" min="0" oninput="calculateTotal()" 
-                            class="w-full bg-slate-950 border border-amber-500/60 focus:border-amber-400 focus:outline-none rounded px-1.5 py-1 text-right font-mono font-bold text-amber-300 text-xs">
-                    </div>
-                </div>
-
-                <!-- 合計移動点数 -->
-                <div class="w-full bg-slate-900/90 rounded py-1.5 border border-slate-800">
-                    <span class="text-[9px] text-slate-400 block">合計受取額</span>
-                    <span id="total-display" class="text-sm font-bold text-yellow-400 font-mono">1,000 点</span>
-                </div>
+            <!-- 中央情報 -->
+            <div class="col-start-2 row-start-2 bg-slate-950/80 border border-amber-500/50 rounded-lg p-2 text-center flex flex-col items-center justify-center w-full h-full">
+                <span class="text-[10px] text-slate-400">合計点数</span>
+                <span id="total-amount" class="text-sm font-mono font-bold text-amber-400">1,000点</span>
             </div>
 
-            <!-- 下手 (右) -->
+            <!-- 下家 (右) -->
             <div id="card-right" class="col-start-3 row-start-2 w-full bg-slate-800/95 border-2 border-slate-700/50 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
                 <div class="flex items-center justify-between w-full text-[10px]">
                     <span id="role-right" class="text-slate-400">対象外</span>
-                    <span class="text-slate-400">南家</span>
+                    <span class="text-slate-400">東家</span>
                 </div>
-                <div class="font-bold text-xs truncate max-w-[90px]">下手 (Cさん)</div>
+                <div class="font-bold text-xs truncate max-w-[90px]">下家 (Cさん)</div>
                 <div class="text-[11px] font-mono text-slate-300">25,000点</div>
                 
-                <!-- 点数入力欄 -->
                 <div class="w-full mt-1">
                     <div class="text-[9px] text-slate-400 text-left mb-0.5">支払額 (点)</div>
                     <div class="relative flex items-center">
@@ -122,95 +112,51 @@
             </div>
 
             <!-- 自分 (下) -->
-            <div class="col-start-2 row-start-3 w-full bg-indigo-950/95 border-2 border-indigo-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
+            <div id="card-bottom" class="col-start-2 row-start-3 w-full bg-slate-800/95 border-2 border-amber-400/80 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full">
                 <div class="flex items-center justify-between w-full text-[10px]">
-                    <span class="text-indigo-300 font-semibold px-1 rounded bg-indigo-900/60">和了者</span>
-                    <span class="text-indigo-300">東家</span>
+                    <span id="role-bottom" class="text-amber-400 font-semibold px-1 rounded bg-amber-950/60">和了者</span>
+                    <span class="text-slate-400">南家</span>
                 </div>
-                <div class="font-bold text-xs truncate max-w-[90px]">自分 (You)</div>
-                <div class="text-[11px] font-mono text-amber-300">25,000点</div>
+                <div class="font-bold text-xs truncate max-w-[90px]">自分 (あなた)</div>
+                <div class="text-[11px] font-mono text-slate-300">25,000点</div>
                 
-                <div class="w-full mt-1 bg-indigo-900/40 rounded py-0.5 border border-indigo-800/50">
-                    <span class="text-[9px] text-indigo-300">受取合計: </span>
-                    <span id="self-receive-display" class="text-xs font-bold font-mono text-yellow-300">+1,000</span>
+                <div class="w-full mt-1">
+                    <div class="text-[9px] text-slate-400 text-left mb-0.5">受取額 (点)</div>
+                    <div class="relative flex items-center">
+                        <input type="number" id="input-bottom" value="1000" step="100" min="0" readonly 
+                            class="w-full bg-slate-950 border border-slate-800 opacity-80 rounded px-1.5 py-0.5 text-right font-mono font-bold text-emerald-400 text-xs">
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- 確定ボタン -->
-        <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm rounded-xl shadow-lg transition active:scale-[0.98]">
-            支払いを確定する
-        </button>
+        <!-- フッターボタン (「支払確定」に変更) -->
+        <div class="flex gap-2 pt-1">
+            <button onclick="history.back()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2 px-4 rounded-xl text-xs transition">
+                キャンセル
+            </button>
+            <button onclick="confirmPayment()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2 px-4 rounded-xl text-xs transition shadow-lg shadow-amber-500/20">
+                支払確定
+            </button>
+        </div>
 
     </div>
 
     <script>
-        let currentWinType = 'ron';
-        let targetPlayer = 'top';
-
         function calculateTotal() {
             const topVal = parseInt(document.getElementById('input-top').value) || 0;
             const leftVal = parseInt(document.getElementById('input-left').value) || 0;
             const rightVal = parseInt(document.getElementById('input-right').value) || 0;
-            const kyotakuVal = parseInt(document.getElementById('input-kyotaku').value) || 0;
-
-            // プレイヤーからの受取 ＋ 供託への支払い/受取の計算
-            const total = topVal + leftVal + rightVal - kyotakuVal;
             
-            document.getElementById('total-display').innerText = total.toLocaleString() + ' 点';
-            document.getElementById('self-receive-display').innerText = (total >= 0 ? '+' : '') + total.toLocaleString();
+            const total = topVal + leftVal + rightVal;
+            document.getElementById('total-amount').innerText = total.toLocaleString() + '点';
+            document.getElementById('input-bottom').value = total;
         }
 
-        function setWinType(type) {
-            currentWinType = type;
-
-            const inputs = {
-                top: document.getElementById('input-top'),
-                left: document.getElementById('input-left'),
-                right: document.getElementById('input-right')
-            };
-
-            const cards = {
-                top: document.getElementById('card-top'),
-                left: document.getElementById('card-left'),
-                right: document.getElementById('card-right')
-            };
-
-            const roles = {
-                top: document.getElementById('role-top'),
-                left: document.getElementById('role-left'),
-                right: document.getElementById('role-right')
-            };
-
-            if (type === 'ron') {
-                // ロンモード：対象プレイヤー（初期値は対面）のみ有効化
-                ['top', 'left', 'right'].forEach(p => {
-                    if (p === targetPlayer) {
-                        inputs[p].disabled = false;
-                        inputs[p].value = 1000;
-                        cards[p].className = 'col-start-' + (p==='top'?2:p==='left'?1:3) + ' row-start-' + (p==='top'?1:2) + ' w-full bg-slate-800/95 border-2 border-red-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full';
-                        roles[p].className = 'text-red-400 font-semibold px-1 rounded bg-red-950/80';
-                        roles[p].innerText = '支払相手';
-                    } else {
-                        inputs[p].disabled = true;
-                        inputs[p].value = 0;
-                        cards[p].className = 'col-start-' + (p==='top'?2:p==='left'?1:3) + ' row-start-' + (p==='top'?1:2) + ' w-full bg-slate-800/95 border-2 border-slate-700/50 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full';
-                        roles[p].className = 'text-slate-400';
-                        roles[p].innerText = '対象外';
-                    }
-                });
-            } else {
-                // ツモモード：全員有効化
-                ['top', 'left', 'right'].forEach(p => {
-                    inputs[p].disabled = false;
-                    inputs[p].value = 1000;
-                    cards[p].className = 'col-start-' + (p==='top'?2:p==='left'?1:3) + ' row-start-' + (p==='top'?1:2) + ' w-full bg-slate-800/95 border-2 border-blue-500 rounded-lg p-2 text-center flex flex-col items-center justify-between shadow-md h-full';
-                    roles[p].className = 'text-blue-300 font-semibold px-1 rounded bg-blue-950/80';
-                    roles[p].innerText = '支払者';
-                });
-            }
-            calculateTotal();
+        function confirmPayment() {
+            // Confirmation logic placeholder
+            console.log("支払が確定されました");
         }
     </script>
 </body>

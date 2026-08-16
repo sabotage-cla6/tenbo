@@ -366,7 +366,7 @@
 
     .control-grid-top {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 8px;
     }
 
@@ -422,6 +422,13 @@
       background: linear-gradient(135deg, #27ae60, #1e8449);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* 精算ボタンのスタイル（追加） */
+    .btn-seisan {
+      background: linear-gradient(135deg, #8e44ad, #732d91);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
     .btn-subtext {
@@ -614,26 +621,27 @@
     <!-- Action Control Dock -->
     <div class="control-dock">
       <div class="control-grid-top">
-        <button class="btn-action btn-agari" onclick="openModal('agari-modal')">
-          <span>🀄 和了</span>
-          <span class="btn-subtext">ロン / ツモ 点数入力</span>
-        </button>
-
         <button class="btn-action btn-riichi" onclick="toggleRiichi('south')">
           <span>⚡ リーチ</span>
           <span class="btn-subtext">1,000点供託</span>
         </button>
+
+        <button class="btn-action btn-agari" onclick="openModal('agari-modal')">
+          <span>🀄 和了</span>
+          <span class="btn-subtext">和了点請求</span>
+        </button>
+
+        <button class="btn-action btn-transfer" onclick="openModal('transfer-modal')">
+          <span>💸 点棒移動</span>
+          <span class="btn-subtext">沖和・特殊精算</span>
+        </button>
+
       </div>
 
       <div class="control-grid-bottom">
         <button class="btn-action btn-ryukyoku" onclick="openModal('ryukyoku-modal')">
           <span>🔄 流局</span>
-          <span class="btn-subtext">聴牌精算</span>
-        </button>
-
-        <button class="btn-action btn-transfer" onclick="openModal('transfer-modal')">
-          <span>💸 移動</span>
-          <span class="btn-subtext">点棒移動</span>
+          <span class="btn-subtext">ノーテン罰符</span>
         </button>
 
         <!-- 新規追加：次局へボタン -->
@@ -641,6 +649,12 @@
           <span>⏩ 次局へ</span>
           <span class="btn-subtext">局・親更新</span>
         </button>
+
+        <button class="btn-action btn-seisan" onclick="openModal('ryukyoku-modal')">
+          <span>🏁 精算</span>
+          <span class="btn-subtext">対局終了</span>
+        </button>
+        
       </div>
     </div>
   </main>

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tenbo/features/game_session/presentation/views/game/game_main.dart';
 import 'package:tenbo/features/game_session/presentation/views/players_home.dart';
-// TODO: players_homeのインポートパスに合わせて変更してください
-// import 'players_home_screen.dart';
 
 class GameCreateScreen extends StatefulWidget {
   const GameCreateScreen({super.key});
@@ -172,7 +171,7 @@ class _GameCreateScreenState extends State<GameCreateScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(
                             0xFFF39C12,
-                          ).withOpacity(0.12),
+                          ).withValues(alpha: 0.12),
                           foregroundColor: const Color(0xFFF1C40F),
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -386,7 +385,7 @@ class _GameCreateScreenState extends State<GameCreateScreen> {
                     desc: 'マイナス分も精算に反映',
                     control: Switch(
                       value: _boxSettlement,
-                      activeColor: Colors.black,
+                      activeThumbColor: Colors.black,
                       activeTrackColor: const Color(0xFFF39C12),
                       inactiveThumbColor: Colors.white,
                       inactiveTrackColor: const Color.fromRGBO(
@@ -560,7 +559,16 @@ class _GameCreateScreenState extends State<GameCreateScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        // ルートを全てクリアして players_home (PlayersHomeScreen) へ遷移する場合
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const TenboScreen(), // クラス名をルール通りScreenに統一
+                          ),
+                          (route) => false,
+                        );
+                      },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -776,7 +784,7 @@ class _GameCreateScreenState extends State<GameCreateScreen> {
   Widget _buildDropdown({
     required dynamic value,
     required List<dynamic> items,
-    required ValueChanged<dynamic?> onChanged,
+    required ValueChanged<dynamic> onChanged,
   }) {
     return Container(
       height: 38,
