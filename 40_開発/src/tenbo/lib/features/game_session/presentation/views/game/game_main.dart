@@ -309,7 +309,15 @@ class _TenboScreenState extends State<TenboScreen> {
                   name,
                   style: const TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textMain, // 視認性を高めるため白系カラーを指定
+                    shadows: [
+                      Shadow(
+                        color: Colors.black54,
+                        blurRadius: 2,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -335,13 +343,36 @@ class _TenboScreenState extends State<TenboScreen> {
             ),
           ),
 
-          // Score Diff
-          Text(
-            diff,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: isPlus ? AppColors.accentGreen : const Color(0xFFFF7675),
+          // Score Diff (非活性テキストボックス)
+          SizedBox(
+            height: 22,
+            width: 64,
+            child: TextField(
+              controller: TextEditingController(text: diff),
+              enabled: false,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isPlus ? AppColors.accentGreen : const Color(0xFFFF7675),
+              ),
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    color:
+                        (isPlus
+                                ? AppColors.accentGreen
+                                : const Color(0xFFFF7675))
+                            .withValues(alpha: 0.4),
+                    width: 1,
+                  ),
+                ),
+                fillColor: Colors.black26,
+                filled: true,
+              ),
             ),
           ),
 
