@@ -119,3 +119,5 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 90_環境構築/.env
 .cache/**
+.config/Code/Cache/**
+.**
