@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "/home/sabotagecla6/src/tenbo/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
