@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "/home/sabotagecla6/src/tenbo/web",
+    "public": "web",
     "ignore": [
       "firebase.json",
       "**/.*",
