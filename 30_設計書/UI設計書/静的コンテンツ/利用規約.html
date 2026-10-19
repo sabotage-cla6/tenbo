@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>tenbo - 利用規約</title>
+  <style>
+    :root {
+      --bg-color: #09170e;
+      --card-bg: rgba(20, 48, 31, 0.9);
+      --card-border: #2c5e3d;
+      --accent-gold: #f39c12;
+      --accent-gold-light: #f1c40f;
+      --text-main: #f0f4f1;
+      --text-muted: #8e9e94;
+      --input-bg: #08140c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      max-width: 420px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(12, 28, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    .btn-close:active {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Container */
+    main {
+      width: 100%;
+      max-width: 420px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .terms-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .last-updated {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Terms Content */
+    .terms-content {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-main);
+      user-select: text;
+    }
+
+    .terms-section {
+      margin-bottom: 20px;
+    }
+
+    .terms-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent-gold-light);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 14px;
+      background: var(--accent-gold);
+      border-radius: 2px;
+    }
+
+    .terms-text {
+      color: #d1d8d3;
+      margin-bottom: 8px;
+    }
+
+    .terms-list {
+      list-style: none;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .terms-list li {
+      position: relative;
+      padding-left: 16px;
+      color: #c0cac2;
+    }
+
+    .terms-list li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      color: var(--accent-gold);
+    }
+
+    /* Footer Action */
+    .action-dock {
+      width: 100%;
+      max-width: 420px;
+      padding: 12px 16px;
+      background: rgba(12, 28, 18, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-agree {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, var(--accent-gold), #d35400);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+
+    .btn-agree:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-icon">点</div>
+      <div class="brand-name">tenbo</div>
+    </div>
+    <button class="btn-close" onclick="history.back()" aria-label="閉じる">✕</button>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    <div class="terms-card">
+      <h1 class="card-title">利用規約</h1>
+      <p class="last-updated">最終更新日: 2026年9月12日</p>
+
+      <div class="terms-content">
+        <!-- 第1条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第1条（適用）</h2>
+          <p class="terms-text">
+            本規約は、ユーザーと「tenbo」（以下「本サービス」）との間の利用に関する一切の関係に適用されます。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。
+          </p>
+        </div>
+
+        <!-- 第2条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第2条（サービスの変更・終了）</h2>
+          <p class="terms-text">
+            本サービスは、運営上の都合等により、ユーザーへの事前の通知なくいつでもサービス内容の変更、一時停止、または提供を終了することができるものとします。これによりユーザーに生じた不利益や損害について、本サービスは一切の責任を負いません。
+          </p>
+        </div>
+
+        <!-- 第3条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第3条（利用料金および有料化）</h2>
+          <p class="terms-text">
+            1. 本サービスは現在無料で提供されていますが、将来にわたり継続して無料で利用できることを保証するものではありません。<br>
+            2. 本サービスを有料化（機能の制限、有料プランの導入、月額課金化等を含みます）する場合、本サービスは改定後の利用規約および料金体系を提示し、ユーザーに対して再度同意を求めるものとします。<br>
+            3. ユーザーが変更後の規約および料金体系に同意しない場合、有料化以降のサービス利用ができなくなる場合があります。
+          </p>
+        </div>
+
+        <!-- 第4条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第4条（アカウント管理）</h2>
+          <p class="terms-text">
+            ユーザーは、自己の責任においてアカウントおよびパスワードを厳重に管理するものとします。第三者による不正使用等により生じた損害について、本サービスは一切の責任を負いません。
+          </p>
+        </div>
+
+        <!-- 第5条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第5条（禁止事項）</h2>
+          <p class="terms-text">ユーザーは、本サービスの利用にあたり以下の行為を行ってはなりません。</p>
+          <ul class="terms-list">
+            <li>法令または公序良俗に違反する行為</li>
+            <li>本サービスのサーバーやネットワークシステムに過度な負荷をかける行為</li>
+            <li>他のユーザーになりすます行為</li>
+            <li>本サービスの運営を妨害する行為</li>
+            <li>その他、本サービスが不適切と判断する行為</li>
+          </ul>
+        </div>
+
+        <!-- 第6条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第6条（免責事項）</h2>
+          <p class="terms-text">
+            1. 本サービスは、提供する機能の正確性、継続性、完全性について明示または黙示を問わずいかなる保証も行いません。<br>
+            2. 本サービスの提供の遅延、中断、終了、またはデータの消失等により生じた損害について、一切の責任を負いません。
+          </p>
+        </div>
+
+        <!-- 第7条 -->
+        <div class="terms-section">
+          <h2 class="section-title">第7条（規約の変更）</h2>
+          <p class="terms-text">
+            本サービスは、必要と判断した場合にはユーザーへの事前通知なく本規約を変更できるものとします。変更後の規約は、本画面上に表示された時点で効力を生じます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Fixed Dock -->
+  <div class="action-dock">
+    <button class="btn-agree" onclick="alert('利用規約に同意しました'); history.back();">
+      同意して戻る
+    </button>
+  </div>
+
+</body>
+</html>

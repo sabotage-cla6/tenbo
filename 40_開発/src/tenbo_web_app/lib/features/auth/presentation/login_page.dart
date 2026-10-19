@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/tenbo_card.dart';
+import '../../home/presentation/pages/home_page.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,10 +29,19 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('ログインしました！\nメールアドレス: $email'),
           backgroundColor: AppColors.cardBorder,
+        ),
+      );
+
+      // 2. HomePage へ遷移（ログイン画面をスタックから置き換える）
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
         ),
       );
     }
@@ -296,8 +307,11 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('サインアップ画面へ遷移します')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpPage(),
+                    ),
                   );
                 },
                 child: const Text(

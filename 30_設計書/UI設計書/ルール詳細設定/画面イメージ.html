@@ -3,28 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>tenbo - ルール編集モーダル</title>
+  <title>tenbo - ルール設定</title>
   <style>
     :root {
       --bg-color: #09170e;
-      --table-bg: radial-gradient(circle, #174028 0%, #0a2114 100%);
-      --card-bg: rgba(20, 48, 31, 0.9);
-      --card-border: #2c5e3d;
+      --header-bg: rgba(12, 28, 18, 0.98);
+      --card-bg: #102619;
+      --card-border: rgba(44, 94, 61, 0.6);
       --accent-gold: #f39c12;
       --accent-gold-light: #f1c40f;
-      --accent-red: #e74c3c;
-      --accent-blue: #3498db;
       --accent-green: #2ecc71;
-      --accent-orange: #e67e22;
-      --text-main: #040504;
+      --text-main: #f0f4f1;
       --text-muted: #8e9e94;
+      --input-bg: #06110a;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
@@ -36,135 +34,114 @@
       height: 100dvh;
       width: 100vw;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       overflow: hidden;
     }
 
-    /* Header */
-    header {
+    /* Page Container (Mobile Viewport) */
+    .page-container {
       width: 100%;
       max-width: 420px;
-      padding: 10px 16px;
-      background: rgba(12, 28, 18, 0.98);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-color);
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Top Navigation Header (ボタンを削除し中央寄せ) */
+    .nav-header {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--header-bg);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      flex-shrink: 0;
       z-index: 10;
     }
 
-    .brand { display: flex; align-items: center; gap: 8px; }
-    .logo-icon {
-      width: 26px; height: 26px;
-      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
-      border-radius: 6px; display: flex; align-items: center; justify-content: center;
-      font-weight: 900; color: #000; font-size: 13px;
-    }
-    .brand-name {
-      font-size: 18px; font-weight: 800;
-      background: linear-gradient(90deg, #fff, var(--accent-gold-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .nav-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* Main Area Background Simulation */
-    main {
-      width: 100%; max-width: 420px; flex: 1; padding: 12px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px; position: relative;
-    }
-
-    .table-container {
-      width: 100%; aspect-ratio: 1 / 1; max-width: 360px;
-      background: var(--table-bg); border-radius: 20px; border: 6px solid #23140c;
-      display: grid; grid-template-rows: 1fr 1fr 1fr; grid-template-columns: 1fr 1fr 1fr;
-      padding: 8px; gap: 8px; opacity: 0.2; filter: blur(2px);
-    }
-
-    /* Modal Overlay & Card */
-    .modal-overlay {
-      display: flex; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-      z-index: 100; align-items: center; justify-content: center; padding: 12px;
-    }
-
-    /* モーダルカードの縦幅溢れを抑え、可変にする設定 */
-    .modal-card {
-      background: #102619; border: 1.5px solid var(--accent-gold);
-      border-radius: 16px; width: 100%; max-width: 380px; max-height: 85vh;
-      display: flex; flex-direction: column; padding: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
-      animation: modalPop 0.2s ease-out;
-      overflow: hidden; /* 子要素のスクロールを正しく機能させる */
-    }
-
-    @keyframes modalPop {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .modal-header {
-      font-size: 15px; font-weight: 800; color: var(--accent-gold);
-      display: flex; justify-content: space-between; align-items: center;
-      padding-bottom: 8px; margin-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      flex-shrink: 0; /* ヘッダーの潰れ防止 */
-    }
-
-    .modal-close { cursor: pointer; font-size: 20px; color: var(--text-muted); background: none; border: none; }
-
-    /* Category Tabs */
+    /* Jump Navigation Tabs */
     .rule-tabs {
-      display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05); scrollbar-width: none;
-      flex-shrink: 0; /* タブの潰れ防止 */
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      scrollbar-width: none;
+      flex-shrink: 0;
     }
     .rule-tabs::-webkit-scrollbar { display: none; }
 
     .rule-tab-btn {
-      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-muted); padding: 5px 10px; border-radius: 8px;
-      font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .rule-tab-btn.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold-light); }
+    .rule-tab-btn:active {
+      background: var(--accent-gold);
+      color: #000;
+      border-color: var(--accent-gold-light);
+    }
 
-    /* Modal Body Content (スクロール領域の設定強化) */
-    .modal-body {
-      display: flex; flex-direction: column; gap: 10px;
-      overflow-y: auto;
+    /* Scrollable Content Body */
+    .content-body {
       flex: 1;
-      min-height: 0; /* Flexボックス内のスクロールを正常化する必須プロパティ */
-      padding-right: 4px;
-      margin-bottom: 12px;
-      -webkit-overflow-scrolling: touch; /* スマホでのスムーズスクロール */
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth; /* スムーズスクロール有効化 */
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* 折りたたみ (details/summary) スタイル設定 */
+    /* Section & Cards */
     .rule-section {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
       overflow: hidden;
-      flex-shrink: 0; /* 折たたみ時に縮まないように固定 */
+      flex-shrink: 0;
     }
     
     .section-title {
-      font-size: 11px; font-weight: 800; color: var(--accent-gold-light);
-      display: flex; align-items: center; justify-content: space-between; gap: 4px;
-      text-transform: uppercase;
-      padding: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent-gold-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
       cursor: pointer;
       list-style: none;
       background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
-    .section-title::-webkit-details-marker {
-      display: none;
-    }
+    .section-title::-webkit-details-marker { display: none; }
 
     .section-title::after {
       content: '▶';
-      font-size: 9px;
+      font-size: 10px;
       color: var(--text-muted);
       transition: transform 0.2s ease;
     }
@@ -177,40 +154,73 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 8px;
+      padding: 10px;
+    }
+
+    /* Sub-section Group Styling */
+    .sub-section {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-left: 3px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sub-section-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-gold-light);
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 2px;
     }
 
     /* Editable Item Card Layout */
     .edit-card {
-      background: rgba(8, 20, 12, 0.7);
-      border: 1px solid rgba(44, 94, 61, 0.6);
-      border-radius: 8px; padding: 8px 10px;
-      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      background: rgba(6, 17, 10, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
     }
 
     .edit-card.column-layout {
       flex-direction: column;
       align-items: flex-start;
-      gap: 6px;
+      gap: 8px;
     }
 
     .edit-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-    .edit-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
-    .edit-sub { font-size: 10px; color: var(--text-muted); }
+    .edit-name { font-size: 13px; font-weight: 700; color: var(--text-main); }
+    .edit-sub { font-size: 11px; color: var(--text-muted); }
 
-    /* Form Controls Styling */
+    /* Controls Styling */
     select, input[type="text"], input[type="number"] {
-      background: #06110a; color: var(--accent-gold-light);
-      border: 1px solid var(--card-border); border-radius: 6px;
-      padding: 4px 8px; font-size: 11px; font-weight: 700; text-align: right;
-      outline: none; max-width: 120px;
+      background: var(--input-bg);
+      color: var(--accent-gold-light);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+      outline: none;
+      max-width: 140px;
     }
     select:focus, input:focus { border-color: var(--accent-gold); }
 
-    /* Uma Input Layout */
+    /* Uma Inputs Layout */
     .uma-inputs {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       width: 100%;
       justify-content: space-between;
     }
@@ -219,228 +229,273 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 4px;
       flex: 1;
     }
+    .uma-field span { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+    .uma-field input { width: 100%; text-align: center; padding: 6px 2px; }
 
-    .uma-field span {
-      font-size: 9px;
-      color: var(--text-muted);
-    }
-
-    .uma-field input {
-      width: 100%;
-      text-align: center;
-      padding: 4px 2px;
-    }
-
-    /* Toggle Switch Component */
+    /* Toggle Switch */
     .switch {
-      position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0;
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
     }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; cursor: pointer; inset: 0;
-      background-color: rgba(255, 255, 255, 0.15); border-radius: 22px;
+      background-color: rgba(255, 255, 255, 0.15); border-radius: 24px;
       transition: .2s; border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .slider:before {
-      position: absolute; content: ""; height: 16px; width: 16px;
-      left: 2px; bottom: 2px; background-color: #fff; border-radius: 50%;
-      transition: .2s;
+      position: absolute; content: ""; height: 18px; width: 18px;
+      left: 2px; bottom: 2px; background-color: #fff; border-radius: 50%; transition: .2s;
     }
     input:checked + .slider { background-color: var(--accent-green); }
-    input:checked + .slider:before { transform: translateX(18px); }
+    input:checked + .slider:before { transform: translateX(20px); }
 
-    /* Footer Buttons */
-    .modal-btn-row {
-      display: flex; gap: 8px;
-      flex-shrink: 0; /* ボタンエリアの潰れ防止 */
+    /* Bottom Action Area */
+    .footer-actions {
+      padding: 12px 16px;
+      background: var(--header-bg);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
     }
-    .modal-btn {
-      flex: 1; padding: 10px; border-radius: 8px; border: none;
-      font-weight: 800; font-size: 12px; cursor: pointer; text-align: center;
-    }
-    .modal-btn-primary {
-      background: linear-gradient(135deg, var(--accent-gold), #d35400); color: #fff;
-      box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
-    }
-    .modal-btn-secondary {
-      background: rgba(255, 255, 255, 0.08); color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+
+    .save-btn-large {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--accent-gold), #d35400);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.25);
     }
   </style>
 </head>
 <body>
 
-  <!-- App Header -->
-  <header>
-    <div class="brand">
-      <div class="logo-icon">点</div>
-      <div class="brand-name">tenbo</div>
+  <div class="page-container">
+    
+    <!-- Top Nav Header (ボタン非表示) -->
+    <header class="nav-header">
+      <div class="nav-title">⚙️ ルール設定</div>
+    </header>
+
+    <!-- 移動用ナビゲーションボタン -->
+    <div class="rule-tabs">
+      <button class="rule-tab-btn" onclick="scrollToSection('sec-basic')">基本対局ルール</button>
+      <button class="rule-tab-btn" onclick="scrollToSection('sec-agari')">あがり・点数計算</button>
+      <button class="rule-tab-btn" onclick="scrollToSection('sec-seisan')">精算ルール</button>
     </div>
-    <button class="modal-close" style="font-size:16px;">⚙️</button>
-  </header>
 
-  <!-- Smartphone Main Frame -->
-  <main>
-    <div class="table-container"></div>
-
-    <!-- Rule Edit Modal Simulation -->
-    <div class="modal-overlay">
-      <div class="modal-card">
+    <!-- Scrollable Main Content -->
+    <div class="content-body">
+      
+      <!-- Section 1: 基本対局ルール -->
+      <details class="rule-section" id="sec-basic" open>
+        <summary class="section-title">⚙️ 基本対局ルール</summary>
         
-        <!-- Header -->
-        <div class="modal-header">
-          <span>🛠️ ルール設定の編集</span>
-          <span class="modal-close" onclick="alert('変更を破棄します')">&times;</span>
-        </div>
+        <div class="section-content">
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">対局形式</span>
+              <span class="edit-sub">プレイヤー数と局数</span>
+            </div>
+            <select id="gameMode">
+              <option selected>4人・東南戦</option>
+              <option>4人・東風戦</option>
+              <option>3人・東南戦</option>
+              <option>3人・東風戦</option>
+            </select>
+          </div>
 
-        <!-- Filter Tabs -->
-        <div class="rule-tabs">
-          <button class="rule-tab-btn active">すべて</button>
-          <button class="rule-tab-btn">基本設定</button>
-          <button class="rule-tab-btn">あがり・精算</button>
-          <button class="rule-tab-btn">ドラ・赤</button>
-          <button class="rule-tab-btn">特殊ルール</button>
-        </div>
-
-        <!-- Form Body -->
-        <div class="modal-body">
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">延長戦</span>
+              <span class="edit-sub">東風戦での南入、半荘戦での西入</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="extension" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
           
-          <!-- Section 1: 基本設定 -->
-          <details class="rule-section" open>
-            <summary class="section-title">⚙️ 基本対局ルール</summary>
-            
-            <div class="section-content">
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">対局形式</span>
-                  <span class="edit-sub">プレイヤー数と局数</span>
-                </div>
-                <select>
-                  <option selected>4人・東南戦</option>
-                  <option>4人・東風戦</option>
-                  <option>3人・東南戦</option>
-                  <option>3人・東風戦</option>
-                </select>
-              </div>
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">持ち点(配給原点)</span>
+              <span class="edit-sub">開始時の所持点数</span>
+            </div>
+            <input type="number" id="startPoints" value="25000" step="1000">
+          </div>
 
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">配給原点 (持ち点)</span>
-                  <span class="edit-sub">開始時の所持点数</span>
-                </div>
-                <input type="number" value="25000" step="1000">
-              </div>
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">返し点 (原点)</span>
+              <span class="edit-sub">オカ計算の基準点</span>
+            </div>
+            <input type="number" id="returnPoints" value="30000" step="1000">
+          </div>
 
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">返し点 (原点)</span>
-                  <span class="edit-sub">オカ計算の基準点</span>
-                </div>
-                <input type="number" value="30000" step="1000">
+          <!-- 順位ウマ -->
+          <div class="edit-card column-layout">
+            <div class="edit-info">
+              <span class="edit-name">順位ウマ (pt)</span>
+              <span class="edit-sub">1位 〜 4位の配分点を指定</span>
+            </div>
+            <div class="uma-inputs">
+              <div class="uma-field">
+                <span>1位</span>
+                <input type="number" id="uma1" value="30" step="1">
               </div>
-
-              <!-- 順位ウマ（数値直接入力） -->
-              <div class="edit-card column-layout">
-                <div class="edit-info">
-                  <span class="edit-name">順位ウマ (pt)</span>
-                  <span class="edit-sub">1位 〜 4位の配分点を指定</span>
-                </div>
-                <div class="uma-inputs">
-                  <div class="uma-field">
-                    <span>1位</span>
-                    <input type="number" value="30" step="5">
-                  </div>
-                  <div class="uma-field">
-                    <span>2位</span>
-                    <input type="number" value="10" step="5">
-                  </div>
-                  <div class="uma-field">
-                    <span>3位</span>
-                    <input type="number" value="-10" step="5">
-                  </div>
-                  <div class="uma-field">
-                    <span>4位</span>
-                    <input type="number" value="-30" step="5">
-                  </div>
-                </div>
+              <div class="uma-field">
+                <span>2位</span>
+                <input type="number" id="uma2" value="10" step="1">
+              </div>
+              <div class="uma-field">
+                <span>3位</span>
+                <input type="number" id="uma3" value="-10" step="1">
+              </div>
+              <div class="uma-field">
+                <span>4位</span>
+                <input type="number" id="uma4" value="-30" step="1">
               </div>
             </div>
-          </details>
+          </div>
 
-          <!-- Section 2: あがり・点数計算 -->
-          <details class="rule-section">
-            <summary class="section-title">🀄 あがり・点数計算</summary>
-
-            <div class="section-content">
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">切り上げ満貫</span>
-                  <span class="edit-sub">30符4翻/60符3翻を8000点化</span>
-                </div>
-                <label class="switch">
-                  <input type="checkbox">
-                  <span class="slider"></span>
-                </label>
-              </div>
-
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">複数和了時の積棒</span>
-                  <span class="edit-sub">複数人のロンあがり</span>
-                </div>
-                <select>
-                  <option selected>頭ハネ (1名のみ)</option>
-                  <option>全員</option>
-                </select>
-              </div>
-            </div>
-          </details>
-
-          <!-- Section 3: 精算 -->
-          <details class="rule-section">
-            <summary class="section-title">⚙️ 精算</summary>
-            
-            <div class="section-content">
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">100点棒</span>
-                  <span class="edit-sub">100点棒の丸め方法を指定</span>
-                </div>
-                <select>
-                  <option selected>五捨六入</option>
-                  <option>丸めなし（小数点利用）</option>
-                  <option>四捨五入</option>
-                  <option>切り捨て</option>
-                  <option>切り上げ</option>
-                </select>
-              </div>
-
-              <div class="edit-card">
-                <div class="edit-info">
-                  <span class="edit-name">箱下精算</span>
-                  <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
-                </div>
-                <label class="switch">
-                  <input type="checkbox">
-                  <span class="slider"></span>
-                </label>
-              </div>
-            </div>
-          </details>
         </div>
+      </details>
 
-        <!-- Footer Buttons -->
-        <div class="modal-btn-row">
-          <button class="modal-btn modal-btn-secondary" onclick="alert('変更を破棄します')">キャンセル</button>
-          <button class="modal-btn modal-btn-primary" onclick="alert('ルールを保存・適用しました')">変更を保存</button>
+      <!-- Section 2: あがり・点数計算 -->
+      <details class="rule-section" id="sec-agari" open>
+        <summary class="section-title">🀄 あがり・点数計算</summary>
+
+        <div class="section-content">
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">切り上げ満貫</span>
+              <span class="edit-sub">30符4翻/60符3翻を8000点化</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="kiriage" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">複数和了時の積棒</span>
+              <span class="edit-sub">複数人のロンあがり</span>
+            </div>
+            <select id="multiRon">
+              <option selected>頭ハネ (1名のみ)</option>
+              <option>全員</option>
+            </select>
+          </div>
         </div>
+      </details>
 
-      </div>
+      <!-- Section 3: 精算 -->
+      <details class="rule-section" id="sec-seisan" open>
+        <summary class="section-title">⚖️ 精算ルール</summary>
+        
+        <div class="section-content">
+          <div class="edit-card">
+            <div class="edit-info">
+              <span class="edit-name">100点棒</span>
+              <span class="edit-sub">100点棒の丸め方法を指定</span>
+            </div>
+            <select id="rounding">
+              <option selected>五捨六入</option>
+              <option>丸めなし（小数点利用）</option>
+              <option>四捨五入</option>
+              <option>切り捨て</option>
+              <option>切り上げ</option>
+            </select>
+          </div>
+
+          <!-- サブセクション: トビ・マイナス点設定 -->
+          <div class="sub-section">
+            <div class="sub-section-header">💸 トビ・マイナス点設定</div>
+
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">トビ終了</span>
+                <span class="edit-sub">持ち点0点未満で即終了</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="tobi" checked onchange="toggleTobisho()">
+                <span class="slider"></span>
+              </label>
+            </div>
+            
+            <div class="edit-card">
+              <div class="edit-info">
+                <span class="edit-name">箱下精算</span>
+                <span class="edit-sub">持ち点0点未満をマイナス点として計算</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="hakoshita" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="edit-card" id="tobishoCard">
+              <div class="edit-info">
+                <span class="edit-name">飛び賞 (pt)</span>
+                <span class="edit-sub">飛ばした際に獲得する賞点（無しは0）</span>
+              </div>
+              <input type="number" id="tobisho" value="10" step="1">
+            </div>
+          </div>
+
+        </div>
+      </details>
+
     </div>
-  </main>
 
+    <!-- Bottom Fixed Action Area -->
+    <div class="footer-actions">
+      <button class="save-btn-large" onclick="saveRules()">設定を保存して適用</button>
+    </div>
+
+  </div>
+
+  <script>
+    // 対象のセクションへスムーズ移動する処理
+    function scrollToSection(sectionId) {
+      const target = document.getElementById(sectionId);
+      if (target) {
+        // 折りたたまれている場合は開く
+        target.open = true;
+        // スクロール移動
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // トビ終了スイッチ連動処理
+    function toggleTobisho() {
+      const isTobiOn = document.getElementById('tobi').checked;
+      const tobishoCard = document.getElementById('tobishoCard');
+      tobishoCard.style.display = isTobiOn ? 'flex' : 'none';
+    }
+
+    function saveRules() {
+      const mode = document.getElementById('gameMode').value;
+      const start = document.getElementById('startPoints').value;
+      const tobiOn = document.getElementById('tobi').checked;
+      const tobisho = tobiOn ? document.getElementById('tobisho').value : 0;
+
+      alert(`ルール設定を保存しました！\n・対局形式: ${mode}\n・配給原点: ${start}点\n・トビ終了: ${tobiOn ? 'ON' : 'OFF'}\n・飛び賞: ${tobiOn ? tobisho + 'pt' : '無効'}`);
+    }
+
+    // 初期実行
+    toggleTobisho();
+  </script>
 </body>
 </html>

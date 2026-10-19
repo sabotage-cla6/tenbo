@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../auth/presentation/login_page.dart';
+import '../../../auth/presentation/signup_page.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -350,7 +352,12 @@ class _RightPane extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: サインアップ画面への遷移
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpPage(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -404,7 +411,12 @@ class _RightPane extends StatelessWidget {
                 height: 48,
                 child: OutlinedButton(
                   onPressed: () {
-                    // TODO: ログイン画面への遷移
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: AppColors.inputBg,
@@ -511,7 +523,14 @@ class _Footer extends StatelessWidget {
                   const SizedBox(width: 20),
                   _footerLink('プライバシーポリシー', () {}),
                   const SizedBox(width: 20),
-                  _footerLink('ログイン', () {}),
+                  _footerLink('ログイン', () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  }),
                 ],
               ),
             ],
